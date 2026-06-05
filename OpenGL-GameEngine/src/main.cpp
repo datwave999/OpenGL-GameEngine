@@ -1,9 +1,6 @@
 #include<iostream>
 
-#include<fstream>
-#include<sstream>
-#include<streambuf>
-#include<string>
+#include<vector>
 
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
@@ -12,98 +9,10 @@
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/type_ptr.hpp>
 
+#include"Shader.h"
+#include"Window.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
-std::string loadShaderSource(const char* filename);
-
-int main() {
-
-	int success;
-	char infoLog[512];
-
-
-	glfwInit();
-	// OpenGL version 4.6
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	// Compatibility with MacOS
-#ifdef __APPLE__
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
-	//Creating window
-	GLFWwindow* window = glfwCreateWindow(800, 600, "Game Engine", NULL, NULL);
-	if (window == nullptr) { 
-		std::cout << "Could not create window." << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-
-	glViewport(0, 0, 800, 600);
-
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	//
-
-	/*
-		shaders
-	*/
-
-	// compile vertex shader
-	GLuint vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	std::string vertexShaderSource = loadShaderSource("assets/Shaders/core.vert");
-	const GLchar* vertexShaderCode = vertexShaderSource.c_str();
-	glShaderSource(vertexShader, 1, &vertexShaderCode, NULL);
-	glCompileShader(vertexShader);
-		// error handling
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "Error with vertex shader compilation: " << infoLog << std::endl;
-	}
-
-	// compile fragment shader
-	GLuint fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	std::string fragmentShaderSource = loadShaderSource("assets/Shaders/core.frag");
-	const GLchar* fragmentShaderCode = fragmentShaderSource.c_str();
-	glShaderSource(fragmentShader, 1, &fragmentShaderCode, NULL);
-	glCompileShader(fragmentShader);
-		// error handling
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "Error with fragment shader compilation: " << infoLog << std::endl;
-	}
-
-	// Linking to shader program
-	GLuint shaderProgram;
-	shaderProgram = glCreateProgram();
-
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-		// error handling
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "Error Linking Shaders: " << infoLog << std::endl;
-	}
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
+GLuint createMesh() {
 	// vertex array
 	GLfloat vertices[] = {
 		-0.5f, -0.5f, 0.0f,
@@ -120,7 +29,7 @@ int main() {
 
 
 	// VAO, VBO
-	GLuint VAO, VBO , EBO;
+	GLuint VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
@@ -130,11 +39,11 @@ int main() {
 
 	// bind VBO
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	// bind EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// pass data into VAO
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
@@ -142,11 +51,40 @@ int main() {
 
 	glBindVertexArray(0);
 	// unbinded VAO
-	
-	// Main Window Loop
-	while (!glfwWindowShouldClose(window)) {
+
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+
+	return VAO;
+}
+
+/*
+	MAIN FUNCTION ================================================================
+*/
+
+int main() {
+
+	//Creating window
+	Window window(800, 600, "OpenGL Game Engine");
+	if (window.getNativeWindow() == nullptr) return -1;
+
+	//Creating shaders
+	Shader coreShader("assets/Shaders/core.vert", "assets/Shaders/core.frag");
+
+	GLuint VAO = createMesh();
+
+	//Uniforms
+	glm::mat4 model(1.0f);
+
+
+	/*
+	=======================
+		MAIN GAME LOOP
+	=======================
+	*/
+	while (!window.shouldClose()) {
 		// process input
-		processInput(window);
+		window.processInput();
 
 		// render 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -154,49 +92,46 @@ int main() {
 
 		// Draw Shapes
 		glBindVertexArray(VAO);
-		glUseProgram(shaderProgram);
+		coreShader.enableShader();
+
+		model = glm::rotate(model, static_cast<float>(glm::radians(glfwGetTime() / 10.0f)), glm::vec3(0.0f, 0.0f, 1.0f));
+		coreShader.setUniform("model", model);
+
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		glUseProgram(0);
+		coreShader.disableShader();
 
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		window.swapBuffers();
+		window.pollEvents();
 	}
 
-	// add comment to test git stash
-
-	glfwTerminate();
+	glDeleteVertexArrays(1, &VAO);
 	return 0;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
-}
 
-void processInput(GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, true);
-	}
-}
+/*
+src/
 
-std::string loadShaderSource(const char* filename) {
-	std::ifstream file;
-	std::stringstream buf;
+├── main.cpp
 
-	std::string ret = "";
+├── Application.cpp
 
-	file.open(filename);
+├── Window.cpp
 
-	if (file.is_open()) {
-		buf << file.rdbuf();
-		ret = buf.str();
-	}
-	else {
-		std::cout << "Could not open: " << filename << std::endl;
-	}
+├── rendering/
 
-	file.close();
+│   ├── Shader.cpp
+		
+		Mesh.cpp
+		
+│   ├── Buffer.cpp
 
-	return ret;
-}
+│   ├── VertexArray.cpp
+
+│   └── Texture.cpp
+
+└── scene/
+
+	└── Camera.cpp
+*/

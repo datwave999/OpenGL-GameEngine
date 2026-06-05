@@ -152,9 +152,11 @@
     <ClCompile Include="lib\stb.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Shader.h" />
+    <ClInclude Include="include\Window.h" />
     <ClInclude Include="src\Headers\Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
