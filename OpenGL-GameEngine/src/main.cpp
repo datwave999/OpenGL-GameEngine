@@ -1,6 +1,7 @@
 #include<iostream>
 
 #include<vector>
+#include<string>
 
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
@@ -27,14 +28,13 @@ int main() {
 	Shader coreShader("assets/Shaders/core.vert", "assets/Shaders/core.frag");
 
 
-
 	//Mesh
 	// vertex array
-	GLfloat vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f
+	GLfloat vertices[] = {           // tex
+		-0.5f, -0.5f, 0.0f,			0.0f, 0.0f,
+		0.5f, -0.5f, 0.0f,			1.0f, 0.0f,
+		0.5f, 0.5f, 0.0f,			1.0f, 1.0f,
+		-0.5f, 0.5f, 0.0f,			0.0f, 1.0f
 	};
 
 	// Index array
@@ -43,11 +43,16 @@ int main() {
 		0, 1, 2
 	};
 
-	Mesh square(vertices, sizeof(vertices), indices, sizeof(indices));
+	Texture* obama = new Texture("assets/Textures/obama_sandwich.jpg", "texture_diffuse");
+	Texture* flag = new Texture("assets/Textures/community.png", "texture_diffuse");
+
+	Mesh square(vertices, sizeof(vertices), indices, sizeof(indices), flag);
 
 	//Uniforms
 	glm::mat4 model(1.0f);
-
+	coreShader.enableShader();
+	coreShader.setUniform("texture1", 0);
+	coreShader.disableShader();
 
 	/*
 	=======================
@@ -65,7 +70,7 @@ int main() {
 		// Draw Shapes
 		coreShader.enableShader();
 
-		model = glm::rotate(model, static_cast<float>(glm::radians(glfwGetTime() / 10.0f)), glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::rotate(model, static_cast<float>(glm::radians(glfwGetTime() / 10.0f)), glm::vec3(0.0f, 0.0f, 1.0f));
 		coreShader.setUniform("model", model);
 
 		square.Render();
@@ -76,7 +81,7 @@ int main() {
 		window.pollEvents();
 	}
 
-	
+	delete obama;
 	return 0;
 }
 
