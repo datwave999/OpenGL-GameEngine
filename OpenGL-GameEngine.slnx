@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="OpenGL-GameEngine/OpenGL-GameEngine.vcxproj" />
+  <Project Path="OpenGL-GameEngine/OpenGL-GameEngine.vcxproj" Id="58159106-4f9a-4bb6-9ffc-c7ddf6a6dd64" />
 </Solution>
