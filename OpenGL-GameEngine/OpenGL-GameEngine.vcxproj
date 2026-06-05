@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{58159106-4f9a-4bb6-9ffc-c7ddf6a6dd64}</ProjectGuid>
+    <ProjectGuid>{24949153-8822-9FB7-8F2A-29174F5C1DE8}</ProjectGuid>
     <RootNamespace>OpenGLGameEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
