@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh(GLfloat* vertices, GLsizeiptr vertSize, GLuint* indices, GLsizeiptr indSize, Texture* texture) : texture(texture)
+Mesh::Mesh(GLfloat* vertices, GLsizeiptr vertSize, GLuint* indices, GLsizeiptr indSize)
 {
 	VAO.bind();
 
@@ -13,15 +13,9 @@ Mesh::Mesh(GLfloat* vertices, GLsizeiptr vertSize, GLuint* indices, GLsizeiptr i
 	indexCount = static_cast<GLsizei>(indSize / sizeof(GLuint));
 }
 
-void Mesh::Render(Shader* shader, const glm::mat4& modelMatrix)
+void Mesh::RenderMesh()
 {
 	VAO.bind();
-
-	shader->setUniform("texture1", 0);
-	shader->setUniform("model", modelMatrix);
-
-	texture->Use(0);
-
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 }
 

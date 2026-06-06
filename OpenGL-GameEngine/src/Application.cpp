@@ -6,9 +6,10 @@
 #include "Mesh.h"
 #include "Input.h" 
 #include "Camera.h"
+#include "Object.h"
+#include "Material.h"
 
-Application::Application() : window(nullptr), coreShader(nullptr), cube(nullptr), obama(nullptr), flag(nullptr), camera(nullptr), lastFrameTime(0.0), frameCount(0), fpsTimer(0.0) {
-    model = glm::mat4(1.0f);
+Application::Application() : window(nullptr), coreShader(nullptr), camera(nullptr), lastFrameTime(0.0), frameCount(0), fpsTimer(0.0) {
 }
 
 Application::~Application() {
@@ -106,15 +107,24 @@ bool Application::Initialize() {
         20, 21, 22, 22, 23, 20
     };
 
-    // Load Textures
-    obama = new Texture("assets/Textures/obama_sandwich.jpg", "texture_diffuse");
-    flag = new Texture("assets/Textures/community.png", "texture_diffuse");
+    // Load Textures & Material
+    assets.textures["obama"] = new Texture("assets/Textures/obama_sandwich.jpg", "texture_diffuse");
+    assets.textures["flag"] = new Texture("assets/Textures/community.png", "texture_diffuse");
 
-    // Build Mesh
-    cube = new Mesh(vertices, sizeof(vertices), indices, sizeof(indices), flag);
 
-    // Initial Shader Setup
+    assets.materials["obamaSandwich"] = new Material(assets.textures["obama"], 0);
+    assets.materials["communityFlag"] = new Material(assets.textures["flag"], 0);
 
+    // Build Mesh & Object
+    assets.meshes["cube"] = new Mesh(vertices, sizeof(vertices), indices, sizeof(indices));
+
+    Object* obamaCube = new Object(assets.meshes["cube"], assets.materials["obamaSandwich"]);
+    objectList.push_back(obamaCube);
+    Object* flagCube = new Object(assets.meshes["cube"], assets.materials["communityFlag"]);
+    objectList.push_back(flagCube);
+
+    // Initial Object Setup
+    objectList[1]->transform.Translate(glm::vec3(0.0f, 2.0f, 0.0f));
 
     // Set starting time
     lastFrameTime = glfwGetTime();
@@ -126,6 +136,10 @@ bool Application::Initialize() {
 void Application::Update(double dt) {
     // handles OS-level things (like pressing ESC to close)
     window->processInput();
+
+    // Transform Object
+    objectList[0]->transform.Rotate(60 * (float)dt, glm::vec3(1.0f, 1.0f, 0.0f));
+    objectList[1]->transform.Rotate(40 * (float)dt, glm::vec3(0.0f, 0.0f, 1.0f));
 
     camera->Update(dt);
     camera->processMouseScroll(Input::getScrollDY());
@@ -140,7 +154,9 @@ void Application::Render() {
 
     camera->setUniforms(coreShader, window->getWidth(), window->getHeight());
 
-    cube->Render(coreShader, model);
+    for (Object* obj : objectList) {
+        obj->Render(coreShader);
+    }
 
     coreShader->disableShader();
 }
@@ -178,9 +194,7 @@ void Application::Run() {
 
 // --- Memory Cleanup ---
 void Application::Shutdown() {
-    if (cube) { delete cube;     cube = nullptr; }
-    if (obama) { delete obama;      obama = nullptr; }
-    if (flag) { delete flag;       flag = nullptr; }
+    for (Object* obj : objectList) { delete obj; obj = nullptr; }
     if (coreShader) { delete coreShader; coreShader = nullptr; }
     if (window) { delete window;     window = nullptr; }
 }

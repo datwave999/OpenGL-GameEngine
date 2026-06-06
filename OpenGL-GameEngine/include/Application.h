@@ -1,7 +1,11 @@
 #pragma once
 
 #include <string>
+#include<vector>
+
 #include <glm/glm.hpp>
+
+#include "AssetContainer.h"
 
 // Forward Declarations
 class Window;
@@ -9,6 +13,9 @@ class Shader;
 class Mesh;
 class Texture;
 class Camera;
+class Object;
+class Material;
+
 
 class Application {
 public:
@@ -35,11 +42,9 @@ private:
 
     // --- Assets ---
     Shader* coreShader;
-    Mesh* cube;
-    Texture* obama;
-    Texture* flag;
+    AssetContainer assets;
+    std::vector<Object*> objectList;
 
     // --- Engine State ---
-    glm::mat4 model;
     double lastFrameTime;
 };

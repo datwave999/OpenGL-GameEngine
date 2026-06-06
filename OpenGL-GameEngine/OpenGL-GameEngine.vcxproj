@@ -148,6 +148,9 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\elements\AssetContainer.cpp" />
+    <ClCompile Include="src\elements\Material.cpp" />
+    <ClCompile Include="src\elements\Object.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\input\Input.cpp" />
@@ -160,8 +163,10 @@
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\rendering\VertexArray.cpp" />
     <ClCompile Include="src\rendering\Texture.cpp" />
+    <ClCompile Include="src\elements\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\AssetContainer.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\Buffer.h" />
@@ -169,9 +174,12 @@
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\Input.h" />
+    <ClInclude Include="include\Object.h" />
+    <ClInclude Include="include\Material.h" />
     <ClInclude Include="src\Headers\Shader.h" />
     <ClInclude Include="include\VertexArray.h" />
     <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\core.frag" />

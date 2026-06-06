@@ -2,15 +2,14 @@
 
 #include"VertexArray.h"
 #include"Buffer.h"
-#include"Texture.h"
 #include"Shader.h"
 
 class Mesh
 {
 public:
-	Mesh(GLfloat* vertices, GLsizeiptr vertexSize, GLuint* indices, GLsizeiptr indexSize, Texture* texture);
+	Mesh(GLfloat* vertices, GLsizeiptr vertexSize, GLuint* indices, GLsizeiptr indexSize);
 	
-	void Render(Shader* shader, const glm::mat4& modelMatrix);
+	void RenderMesh();
 
 	~Mesh();
 
@@ -18,8 +17,6 @@ private:
 	Buffer* VBO;
 	Buffer* EBO;
 	VertexArray VAO;
-
-	Texture* texture;
 
 	GLsizei indexCount;
 
