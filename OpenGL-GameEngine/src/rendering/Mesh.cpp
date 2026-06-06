@@ -9,14 +9,20 @@ Mesh::Mesh(GLfloat* vertices, GLsizeiptr vertSize, GLuint* indices, GLsizeiptr i
 
 	VAO.addBuffer(*VBO, 0, 3, GL_FLOAT, 5 * sizeof(float), 0);
 	VAO.addBuffer(*VBO, 1, 2, GL_FLOAT, 5 * sizeof(float), 3 * sizeof(float));
+
+	indexCount = static_cast<GLsizei>(indSize / sizeof(GLuint));
 }
 
-void Mesh::Render()
+void Mesh::Render(Shader* shader, const glm::mat4& modelMatrix)
 {
 	VAO.bind();
-	texture->Use();
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	shader->setUniform("texture1", 0);
+	shader->setUniform("model", modelMatrix);
+
+	texture->Use(0);
+
+	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 }
 
 void Mesh::setupMesh()

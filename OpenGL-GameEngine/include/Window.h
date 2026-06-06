@@ -15,6 +15,13 @@ public:
 	void pollEvents();
 	void processInput();
 
+	// ==== Getters ====
+	int getWidth() const;
+	int getHeight() const;
+
+	// ==== Setters ====
+	void setWindowTitle(const char* newTitle);
+	 
 	GLFWwindow* getNativeWindow() const { return window; }
 
 private:

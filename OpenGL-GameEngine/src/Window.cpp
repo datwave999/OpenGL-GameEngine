@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Input.h"
 
 Window::Window(int widthInt, int heightInt, const char* title) : width(widthInt), height(heightInt)
 {
@@ -31,6 +32,7 @@ Window::Window(int widthInt, int heightInt, const char* title) : width(widthInt)
 
 	glViewport(0, 0, 800, 600);
 
+	// Callback to handle resizing
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
 
@@ -47,10 +49,24 @@ void Window::pollEvents() {
 }
 
 void Window::processInput() {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+	if (Input::keyWentDown(GLFW_KEY_ESCAPE)) {
 		glfwSetWindowShouldClose(window, true);
 	}
 }
+
+int Window::getWidth() const {
+	return width;
+}
+
+int Window::getHeight() const {
+	return height;
+}
+
+void Window::setWindowTitle(const char* newTitle)
+{
+	glfwSetWindowTitle(window, newTitle);
+}
+
 
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);

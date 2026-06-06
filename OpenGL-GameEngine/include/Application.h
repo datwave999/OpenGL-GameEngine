@@ -8,6 +8,7 @@ class Window;
 class Shader;
 class Mesh;
 class Texture;
+class Camera;
 
 class Application {
 public:
@@ -24,12 +25,17 @@ private:
     void Update(double dt);
     void Render();
 
+    // --- FPS ---
+    int frameCount;
+    double fpsTimer;
+
     // --- Core Systems ---
     Window* window;
+    Camera* camera;
 
     // --- Assets ---
     Shader* coreShader;
-    Mesh* square;
+    Mesh* cube;
     Texture* obama;
     Texture* flag;
 

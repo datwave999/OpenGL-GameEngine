@@ -5,9 +5,10 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "Input.h" 
+#include "Camera.h"
 
-Application::Application()
-    : window(nullptr), coreShader(nullptr), square(nullptr), obama(nullptr), flag(nullptr), lastFrameTime(0.0) {
+Application::Application() : window(nullptr), coreShader(nullptr), cube(nullptr), obama(nullptr), flag(nullptr), camera(nullptr), lastFrameTime(0.0), frameCount(0), fpsTimer(0.0) {
+    model = glm::mat4(1.0f);
 }
 
 Application::~Application() {
@@ -16,13 +17,30 @@ Application::~Application() {
 
 // --- Initialization ---
 bool Application::Initialize() {
+
+    // Create Window
     window = new Window(800, 600, "OpenGL Game Engine");
     if (window->getNativeWindow() == nullptr) {
         std::cout << "Failed to initialize Window!" << std::endl;
         return false;
     }
 
-    // IMPORTANT: Register your unified Input callbacks here!
+    // --- GLOBAL ENGINE SETTINGS ---
+    glEnable(GL_DEPTH_TEST);
+
+        // VSync (0 = Off, 1 = On)
+    glfwSwapInterval(0);
+
+    // ------------------------------
+    
+
+    // Create Camera
+    camera = new Camera();
+
+    //Locks cursor
+    glfwSetInputMode(window->getNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    // Pass Callbacks to GLFW
     glfwSetKeyCallback(window->getNativeWindow(), Input::keyCallback);
     glfwSetMouseButtonCallback(window->getNativeWindow(), Input::mouseButtonCallback);
     glfwSetCursorPosCallback(window->getNativeWindow(), Input::cursorPosCallback); 
@@ -32,16 +50,60 @@ bool Application::Initialize() {
     coreShader = new Shader("assets/Shaders/core.vert", "assets/Shaders/core.frag");
 
     // Mesh Geometry
+    // 24 Vertices (4 per face)
+// Format: X, Y, Z, U, V
     GLfloat vertices[] = {
-        -0.5f, -0.5f, 0.0f,    0.0f, 0.0f,
-         0.5f, -0.5f, 0.0f,    1.0f, 0.0f,
-         0.5f,  0.5f, 0.0f,    1.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f,    0.0f, 1.0f
+        // FRONT FACE (Z = 0.5)
+        -0.5f, -0.5f,  0.5f,    0.0f, 0.0f, // 0: Bottom-left
+         0.5f, -0.5f,  0.5f,    1.0f, 0.0f, // 1: Bottom-right
+         0.5f,  0.5f,  0.5f,    1.0f, 1.0f, // 2: Top-right
+        -0.5f,  0.5f,  0.5f,    0.0f, 1.0f, // 3: Top-left
+
+        // BACK FACE (Z = -0.5)
+        -0.5f, -0.5f, -0.5f,    1.0f, 0.0f, // 4: Bottom-right (looking from back)
+         0.5f, -0.5f, -0.5f,    0.0f, 0.0f, // 5: Bottom-left
+         0.5f,  0.5f, -0.5f,    0.0f, 1.0f, // 6: Top-left
+        -0.5f,  0.5f, -0.5f,    1.0f, 1.0f, // 7: Top-right
+
+        // LEFT FACE (X = -0.5)
+        -0.5f, -0.5f, -0.5f,    0.0f, 0.0f, // 8: Bottom-left
+        -0.5f, -0.5f,  0.5f,    1.0f, 0.0f, // 9: Bottom-right
+        -0.5f,  0.5f,  0.5f,    1.0f, 1.0f, // 10: Top-right
+        -0.5f,  0.5f, -0.5f,    0.0f, 1.0f, // 11: Top-left
+
+        // RIGHT FACE (X = 0.5)
+         0.5f, -0.5f,  0.5f,    0.0f, 0.0f, // 12: Bottom-left
+         0.5f, -0.5f, -0.5f,    1.0f, 0.0f, // 13: Bottom-right
+         0.5f,  0.5f, -0.5f,    1.0f, 1.0f, // 14: Top-right
+         0.5f,  0.5f,  0.5f,    0.0f, 1.0f, // 15: Top-left
+
+         // TOP FACE (Y = 0.5)
+         -0.5f,  0.5f,  0.5f,    0.0f, 0.0f, // 16: Bottom-left
+          0.5f,  0.5f,  0.5f,    1.0f, 0.0f, // 17: Bottom-right
+          0.5f,  0.5f, -0.5f,    1.0f, 1.0f, // 18: Top-right
+         -0.5f,  0.5f, -0.5f,    0.0f, 1.0f, // 19: Top-left
+
+         // BOTTOM FACE (Y = -0.5)
+         -0.5f, -0.5f, -0.5f,    0.0f, 0.0f, // 20: Bottom-left
+          0.5f, -0.5f, -0.5f,    1.0f, 0.0f, // 21: Bottom-right
+          0.5f, -0.5f,  0.5f,    1.0f, 1.0f, // 22: Top-right
+         -0.5f, -0.5f,  0.5f,    0.0f, 1.0f  // 23: Top-left
     };
 
+    // 36 Indices (6 faces * 2 triangles per face * 3 vertices per triangle)
     GLuint indices[] = {
-        0, 2, 3,
-        0, 1, 2
+        // Front
+        0, 1, 2,  2, 3, 0,
+        // Back
+        4, 5, 6,  6, 7, 4,
+        // Left
+        8, 9, 10, 10, 11, 8,
+        // Right
+        12, 13, 14, 14, 15, 12,
+        // Top
+        16, 17, 18, 18, 19, 16,
+        // Bottom
+        20, 21, 22, 22, 23, 20
     };
 
     // Load Textures
@@ -49,13 +111,10 @@ bool Application::Initialize() {
     flag = new Texture("assets/Textures/community.png", "texture_diffuse");
 
     // Build Mesh
-    square = new Mesh(vertices, sizeof(vertices), indices, sizeof(indices), flag);
+    cube = new Mesh(vertices, sizeof(vertices), indices, sizeof(indices), flag);
 
     // Initial Shader Setup
-    model = glm::mat4(1.0f);
-    coreShader->enableShader();
-    coreShader->setUniform("texture1", 0);
-    coreShader->disableShader();
+
 
     // Set starting time
     lastFrameTime = glfwGetTime();
@@ -65,25 +124,11 @@ bool Application::Initialize() {
 
 // --- Game Logic ---
 void Application::Update(double dt) {
-    // We can keep the window's generic input process if it handles OS-level things (like pressing ESC to close)
+    // handles OS-level things (like pressing ESC to close)
     window->processInput();
 
-    // --- TEST YOUR NEW INPUT SYSTEM ---
-    // Let's use Delta Time (dt) to move the square at a consistent speed!
-
-    float speed = 2.0f; // Move 2 units per second
-
-    if (Input::getKeyState(GLFW_KEY_W)) {
-        model = glm::translate(model, glm::vec3(0.0f, speed * dt, 0.0f)); // Move Up
-    }
-    if (Input::getKeyState(GLFW_KEY_S)) {
-        model = glm::translate(model, glm::vec3(0.0f, -speed * dt, 0.0f)); // Move Down
-    }
-
-    // Test the "Single Press" edge detection
-    if (Input::keyWentDown(GLFW_KEY_SPACE)) {
-        std::cout << "Spacebar hit exactly once!" << std::endl;
-    }
+    camera->Update(dt);
+    camera->processMouseScroll(Input::getScrollDY());
 }
 
 // --- Rendering Graphics ---
@@ -92,9 +137,10 @@ void Application::Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     coreShader->enableShader();
-    coreShader->setUniform("model", model);
 
-    square->Render();
+    camera->setUniforms(coreShader, window->getWidth(), window->getHeight());
+
+    cube->Render(coreShader, model);
 
     coreShader->disableShader();
 }
@@ -108,11 +154,22 @@ void Application::Run() {
         if (dt > 0.1) dt = 0.1; // Cap at 100ms
         lastFrameTime = currentFrameTime;
 
-        // 2. Execute Engine Phases
+        // 2. FPS count
+        fpsTimer += dt;
+        frameCount++;
+
+        if (fpsTimer >= 1.0) {
+            std::string newTitle = "OpenGL Game Engine - FPS: " + std::to_string(frameCount);
+            window->setWindowTitle(newTitle.c_str());
+            fpsTimer -= 1.0;
+            frameCount = 0;
+        }
+
+        // 3. Execute Engine Phases
         Update(dt);
         Render();
 
-        // 3. End of Frame Tasks
+        // 4. End of Frame Tasks
         Input::EndFrame();     
         window->swapBuffers();
         window->pollEvents();    
@@ -121,7 +178,7 @@ void Application::Run() {
 
 // --- Memory Cleanup ---
 void Application::Shutdown() {
-    if (square) { delete square;     square = nullptr; }
+    if (cube) { delete cube;     cube = nullptr; }
     if (obama) { delete obama;      obama = nullptr; }
     if (flag) { delete flag;       flag = nullptr; }
     if (coreShader) { delete coreShader; coreShader = nullptr; }

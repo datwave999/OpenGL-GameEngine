@@ -12,7 +12,7 @@ VertexArray::~VertexArray() {
 void VertexArray::addBuffer(const Buffer& bufferObject, GLuint location, GLint size, GLenum type, GLsizei stride, int offset) {
 	bind();
 	bufferObject.bind();
-	glVertexAttribPointer(location, size, type, GL_FALSE, stride, (void*)offset);
+	glVertexAttribPointer(location, size, type, GL_FALSE, stride, (void*)(intptr_t)offset);
 	glEnableVertexAttribArray(location);
 }
 
