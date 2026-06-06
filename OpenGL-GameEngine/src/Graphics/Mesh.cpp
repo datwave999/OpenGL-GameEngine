@@ -19,10 +19,6 @@ void Mesh::RenderMesh()
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 }
 
-void Mesh::setupMesh()
-{
-}
-
 Mesh::~Mesh()
 {
 	delete VBO;

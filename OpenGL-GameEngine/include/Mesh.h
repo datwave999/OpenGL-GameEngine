@@ -19,7 +19,5 @@ private:
 	VertexArray VAO;
 
 	GLsizei indexCount;
-
-	void setupMesh();
 };
 

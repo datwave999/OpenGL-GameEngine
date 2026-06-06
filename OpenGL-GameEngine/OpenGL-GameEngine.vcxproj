@@ -148,22 +148,22 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\elements\AssetContainer.cpp" />
-    <ClCompile Include="src\elements\Material.cpp" />
-    <ClCompile Include="src\elements\Object.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\input\Input.cpp" />
-    <ClCompile Include="src\rendering\Mesh.cpp" />
-    <ClCompile Include="src\rendering\Buffer.cpp" />
+    <ClCompile Include="src\Core\Application.cpp" />
+    <ClCompile Include="src\Core\Input.cpp" />
+    <ClCompile Include="src\Core\Window.cpp" />
+    <ClCompile Include="src\Graphics\Buffer.cpp" />
+    <ClCompile Include="src\Graphics\Material.cpp" />
+    <ClCompile Include="src\Graphics\Mesh.cpp" />
+    <ClCompile Include="src\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Graphics\Texture.cpp" />
+    <ClCompile Include="src\Graphics\VertexArray.cpp" />
     <ClCompile Include="lib\glad.c" />
     <ClCompile Include="lib\stb.cpp" />
-    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Resources\AssetContainer.cpp" />
+    <ClCompile Include="src\Scene\Camera.cpp" />
+    <ClCompile Include="src\Scene\Object.cpp" />
+    <ClCompile Include="src\Scene\Transform.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Window.cpp" />
-    <ClCompile Include="src\rendering\VertexArray.cpp" />
-    <ClCompile Include="src\rendering\Texture.cpp" />
-    <ClCompile Include="src\elements\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AssetContainer.h" />
