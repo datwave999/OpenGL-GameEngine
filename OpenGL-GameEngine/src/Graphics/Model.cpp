@@ -24,6 +24,18 @@ void Model::Render(Shader* shader) {
     }
 }
 
-
 void Model::loadModel(const std::string& path) {
+
+}
+
+void Model::processNode(aiNode* node, const aiScene* scene) {
+
+}
+
+Mesh* Model::processMesh(aiMesh* mesh, const aiScene* scene) {
+    return nullptr;
+}
+
+Model::~Model() {
+
 }
