@@ -50,29 +50,31 @@ bool Application::Initialize() {
     // Compile Shaders
     coreShader = new Shader("assets/Shaders/core.vert", "assets/Shaders/core.frag");
 
-    // Load Textures & Material
-    assets.textures["obama"] = std::make_shared<Texture>("assets/Textures/obama_sandwich.jpg", "texture_diffuse");
-    assets.textures["flag"] = std::make_shared<Texture>("assets/Textures/community.png", "texture_diffuse");
+    // 1. Get Textures 
+    auto obamaTex = assets.getTexture("obama", "assets/Textures/obama_sandwich.jpg", "texture_diffuse");
+    auto flagTex = assets.getTexture("flag", "assets/Textures/community.png", "texture_diffuse");
 
-    assets.materials["obamaSandwich"] = std::make_shared<Material>(assets.textures["obama"], 0);
-    assets.materials["communityFlag"] = std::make_shared<Material>(assets.textures["flag"], 0);
+    // 2. Get Materials (from Textures)
+    auto obamaMat = assets.getMaterial("obamaSandwich", obamaTex, 0);
+    auto flagMat = assets.getMaterial("communityFlag", flagTex, 0);
 
-    // Build Mesh & Model
-    assets.meshes["cube"] = StandardMeshes::CreateCube();
-    assets.meshes["sphere"] = StandardMeshes::CreateSphere();
+    // 3. Register Meshes (Using StandardMeshes)
+    auto cubeMesh = assets.getMesh("cube", StandardMeshes::CreateCube());
+    auto sphereMesh = assets.getMesh("sphere", StandardMeshes::CreateSphere());
 
-    assets.models["obamaCube"] = std::make_shared<Model>(assets.meshes["cube"], assets.materials["obamaSandwich"]);
-    assets.models["flagCube"] = std::make_shared<Model>(assets.meshes["cube"], assets.materials["communityFlag"]);
-    assets.models["sandwichSphere"] = std::make_shared<Model>(assets.meshes["sphere"], assets.materials["obamaSandwich"]);
+    // 4. Get Models (from Meshes and Materials)
+    auto obamaCubeModel = assets.getModel("obamaCube", cubeMesh, obamaMat);
+    auto flagCubeModel = assets.getModel("flagCube", cubeMesh, flagMat);
+    auto sandwichSphereModel = assets.getModel("sandwichSphere", sphereMesh, obamaMat);
 
-    // Create Objects
-    objects.push_back(std::make_unique<Object>(assets.models["obamaCube"]));
-    objects.push_back(std::make_unique<Object>(assets.models["flagCube"]));
-    objects.push_back(std::make_unique<Object>(assets.models["sandwichSphere"]));
+    // 5. Create Objects (Takes exclusive ownership of the models via unique_ptr)
+    objects.push_back(std::make_unique<Object>(obamaCubeModel));
+    objects.push_back(std::make_unique<Object>(flagCubeModel));
+    objects.push_back(std::make_unique<Object>(sandwichSphereModel));
 
     // Initial Object Setup
     objects[1]->transform.Translate(glm::vec3(0.0f, 2.0f, 0.0f));
-    objects[2]->transform.Translate(glm::vec3(0.0f, 0.0f, 3.0f));
+    objects[2]->transform.Translate(glm::vec3(0.0f, -1.0f, 3.0f));
 
     // Set starting time
     lastFrameTime = glfwGetTime();
@@ -142,6 +144,7 @@ void Application::Run() {
 
 // --- Memory Cleanup ---
 void Application::Shutdown() {
+    assets.CleanCache();
     objects.clear();
     if (coreShader != nullptr) { delete coreShader; coreShader = nullptr; }
 }

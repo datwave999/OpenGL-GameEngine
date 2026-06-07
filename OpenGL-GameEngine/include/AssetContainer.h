@@ -1,5 +1,5 @@
 #pragma once
-#pragma once
+
 #include <unordered_map>
 #include <string>
 #include <memory>
@@ -11,12 +11,20 @@
 
 class AssetContainer {
 public:
-    std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
-    std::unordered_map<std::string, std::shared_ptr<Material>> materials;
-    std::unordered_map<std::string, std::shared_ptr<Mesh>> meshes;
-    std::unordered_map<std::string, std::shared_ptr<Model>> models;
+    ~AssetContainer();
 
+    std::shared_ptr<Texture> getTexture(const std::string& key, const std::string& filepath, const std::string& type);
+    std::shared_ptr<Material> getMaterial(const std::string& key, const std::shared_ptr<Texture>& texture, int texUnit);
+    std::shared_ptr<Model> getModel(const std::string& key, const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material);
+    std::shared_ptr<Mesh> getMesh(const std::string& key, const std::shared_ptr<Mesh>& newMesh);
+
+    // --- Utilities ---
+    void CleanCache();
     void Clear();
 
-    ~AssetContainer();
+private:
+    std::unordered_map<std::string, std::weak_ptr<Texture>> textures;
+    std::unordered_map<std::string, std::weak_ptr<Material>> materials;
+    std::unordered_map<std::string, std::weak_ptr<Mesh>> meshes;
+    std::unordered_map<std::string, std::weak_ptr<Model>> models;
 };
