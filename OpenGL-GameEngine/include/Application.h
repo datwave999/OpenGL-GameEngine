@@ -2,6 +2,7 @@
 
 #include <string>
 #include<vector>
+#include<unordered_map>
 
 #include <glm/glm.hpp>
 
@@ -43,7 +44,7 @@ private:
     // --- Assets ---
     Shader* coreShader;
     AssetContainer assets;
-    std::vector<Object*> objectList;
+    std::vector<Object*> objects;
 
     // --- Engine State ---
     double lastFrameTime;

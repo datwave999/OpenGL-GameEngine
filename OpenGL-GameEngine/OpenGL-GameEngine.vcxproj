@@ -164,12 +164,14 @@
     <ClCompile Include="src\Scene\Object.cpp" />
     <ClCompile Include="src\Scene\Transform.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Graphics\StandardMeshes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AssetContainer.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\Buffer.h" />
+    <ClInclude Include="include\GeometryUtils.hpp" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\Mesh.h" />
@@ -180,6 +182,7 @@
     <ClInclude Include="include\VertexArray.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Transform.h" />
+    <ClInclude Include="include\StandardMeshes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\core.frag" />
