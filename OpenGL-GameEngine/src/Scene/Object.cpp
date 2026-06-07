@@ -1,14 +1,12 @@
 #include "Object.h"
 
 
-Object::Object(Mesh* assignedMesh, Material* assignedMaterial) : mesh(assignedMesh), material(assignedMaterial) {}
+Object::Object(Model* assignedModel) : model(assignedModel) {}
 
 void Object::Render(Shader* shader) {
-	if (!mesh || !material) return;
+	if (!model) return;
 
 	shader->setUniform("model", transform.getModelMatrix());
 	
-	material->Use(shader);
-
-	mesh->RenderMesh();
+	model->Render(shader);
 }

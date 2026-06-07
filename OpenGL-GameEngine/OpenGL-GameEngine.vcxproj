@@ -148,6 +148,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Graphics\Model.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Input.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\Material.h" />
+    <ClInclude Include="include\Model.h" />
     <ClInclude Include="src\Headers\Shader.h" />
     <ClInclude Include="include\VertexArray.h" />
     <ClInclude Include="include\Texture.h" />

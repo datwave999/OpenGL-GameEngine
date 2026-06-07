@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Transform.h"
-#include "Mesh.h"
-#include "Material.h"
+#include "Model.h"
 #include "Shader.h"
 
 class Object
@@ -10,12 +9,11 @@ class Object
 public:
 	Transform transform;
 
-	Object(Mesh* assignedMesh, Material* assignedMaterial);
+	Object(Model* assignedModel);
 
 	void Render(Shader* shader);
 
 private:
-	Mesh* mesh;
-	Material* material;
+	Model* model;
 };
 

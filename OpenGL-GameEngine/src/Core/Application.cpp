@@ -55,21 +55,29 @@ bool Application::Initialize() {
     assets.textures["obama"] = new Texture("assets/Textures/obama_sandwich.jpg", "texture_diffuse");
     assets.textures["flag"] = new Texture("assets/Textures/community.png", "texture_diffuse");
 
-
     assets.materials["obamaSandwich"] = new Material(assets.textures["obama"], 0);
     assets.materials["communityFlag"] = new Material(assets.textures["flag"], 0);
 
-    // Build Mesh & Object
+    // Build Mesh & Model
     assets.meshes["cube"] = StandardMeshes::CreateCube();
+    assets.meshes["sphere"] = StandardMeshes::CreateSphere();
 
-    Object* obamaCube = new Object(assets.meshes["cube"], assets.materials["obamaSandwich"]);
-    Object* flagCube = new Object(assets.meshes["cube"], assets.materials["communityFlag"]);
+    assets.models["obamaCube"] = new Model(assets.meshes["cube"], assets.materials["obamaSandwich"]);
+    assets.models["flagCube"] = new Model(assets.meshes["cube"], assets.materials["communityFlag"]);
+    assets.models["flagSphere"] = new Model(assets.meshes["sphere"], assets.materials["communityFlag"]);
+
+    // Create Objects
+    Object* obamaCube = new Object(assets.models["obamaCube"]);
+    Object* flagCube = new Object(assets.models["flagCube"]);
+    Object* sandwichSphere = new Object(assets.models["flagSphere"]);
 
     objects.push_back(obamaCube);
     objects.push_back(flagCube);
+    objects.push_back(sandwichSphere);
 
     // Initial Object Setup
     flagCube->transform.Translate(glm::vec3(0.0f, 2.0f, 0.0f));
+    sandwichSphere->transform.Translate(glm::vec3(0.0f, 0.0f, 3.0f));
 
     // Set starting time
     lastFrameTime = glfwGetTime();
@@ -85,6 +93,7 @@ void Application::Update(double dt) {
     // Transform Object
     objects[0]->transform.Rotate(60 * (float)dt, glm::vec3(1.0f, 1.0f, 0.0f));
     objects[1]->transform.Rotate(40 * (float)dt, glm::vec3(0.0f, 0.0f, 1.0f));
+    objects[2]->transform.Rotate(50 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
     camera->Update(dt);
     camera->processMouseScroll(Input::getScrollDY());
