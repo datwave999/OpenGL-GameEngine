@@ -2,6 +2,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <memory>
 
 #include "Texture.h"
 #include "Material.h"
@@ -10,10 +11,10 @@
 
 class AssetContainer {
 public:
-    std::unordered_map<std::string, Texture*> textures;
-    std::unordered_map<std::string, Material*> materials;
-    std::unordered_map<std::string, Mesh*> meshes;
-    std::unordered_map<std::string, Model*> models;
+    std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+    std::unordered_map<std::string, std::shared_ptr<Material>> materials;
+    std::unordered_map<std::string, std::shared_ptr<Mesh>> meshes;
+    std::unordered_map<std::string, std::shared_ptr<Model>> models;
 
     void Clear();
 

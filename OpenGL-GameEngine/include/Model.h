@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -12,21 +13,20 @@
 #include "Shader.h"
 
 struct ModelNode {
-    Mesh* mesh;
-    Material* material;
+    std::shared_ptr<Mesh> mesh;
+    std::shared_ptr<Material> material;
 };
 
 class Model {
 public:
     // Manual Creating
-    Model(Mesh* mesh, Material* material);
+    Model(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material);
     // Importing
     Model(const std::string& path);
 
     // Rendering The Model 
     void Render(Shader* shader);
 
-    ~Model();
 
 private:
     std::vector<ModelNode> nodes;

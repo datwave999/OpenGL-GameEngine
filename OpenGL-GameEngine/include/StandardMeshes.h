@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Mesh.h"
+#include <memory>
 
 class StandardMeshes {
 public:
     // flat shaded 1x1x1 cube
-    static Mesh* CreateCube();
+    static std::shared_ptr<Mesh> CreateCube();
 
     // smooth shaded sphere with adjustable resolution of diameter 1.0
-    static Mesh* CreateSphere(int sectors = 36, int stacks = 18);
+    static std::shared_ptr<Mesh> CreateSphere(int sectors = 36, int stacks = 18);
 };

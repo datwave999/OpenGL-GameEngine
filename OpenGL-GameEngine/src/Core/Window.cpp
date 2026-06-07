@@ -73,5 +73,8 @@ void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height
 }
 
 Window::~Window() {
+	if (window != nullptr) {
+		glfwDestroyWindow(window);
+	}
 	glfwTerminate();
 }

@@ -4,7 +4,7 @@
 
 constexpr float PI = 3.14159265359f;
 
-Mesh* StandardMeshes::CreateCube() {
+std::shared_ptr<Mesh> StandardMeshes::CreateCube() {
     std::vector<Vertex> vertices = {
         // FRONT FACE
         {{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 0
@@ -54,10 +54,10 @@ Mesh* StandardMeshes::CreateCube() {
 
     GeometryUtils::CalculateFlatNormals(vertices, indices);
 
-    return new Mesh(vertices, indices);
+    return std::make_shared<Mesh>(vertices, indices);
 }
 
-Mesh* StandardMeshes::CreateSphere(int sectors, int stacks) {
+std::shared_ptr<Mesh> StandardMeshes::CreateSphere(int sectors, int stacks) {
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
 
@@ -108,5 +108,5 @@ Mesh* StandardMeshes::CreateSphere(int sectors, int stacks) {
 
     GeometryUtils::CalculateSmoothNormals(vertices, indices);
 
-    return new Mesh(vertices, indices);
+    return std::make_shared<Mesh>(vertices, indices);
 }

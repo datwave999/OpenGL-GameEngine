@@ -3,6 +3,7 @@
 #include <string>
 #include<vector>
 #include<unordered_map>
+#include <memory>
 
 #include <glm/glm.hpp>
 
@@ -38,13 +39,13 @@ private:
     double fpsTimer;
 
     // --- Core Systems ---
-    Window* window;
-    Camera* camera;
+    std::unique_ptr<Window> window;
+    std::unique_ptr<Camera> camera;
 
     // --- Assets ---
     Shader* coreShader;
     AssetContainer assets;
-    std::vector<Object*> objects;
+    std::vector<std::unique_ptr<Object>> objects;
 
     // --- Engine State ---
     double lastFrameTime;

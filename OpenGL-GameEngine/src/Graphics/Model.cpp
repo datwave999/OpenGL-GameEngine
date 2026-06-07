@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-Model::Model(Mesh* mesh, Material* material) {
+Model::Model(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material) {
     nodes.push_back({ mesh, material });
 }
 
@@ -34,8 +34,4 @@ void Model::processNode(aiNode* node, const aiScene* scene) {
 
 Mesh* Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     return nullptr;
-}
-
-Model::~Model() {
-
 }

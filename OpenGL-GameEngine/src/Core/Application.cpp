@@ -10,7 +10,7 @@
 #include "Material.h"
 #include "StandardMeshes.h"
 
-Application::Application() : window(nullptr), coreShader(nullptr), camera(nullptr), lastFrameTime(0.0), frameCount(0), fpsTimer(0.0) {
+Application::Application() : coreShader(nullptr), lastFrameTime(0.0), frameCount(0), fpsTimer(0.0) {
 }
 
 Application::~Application() {
@@ -21,7 +21,7 @@ Application::~Application() {
 bool Application::Initialize() {
 
     // Create Window
-    window = new Window(800, 600, "OpenGL Game Engine");
+    window = std::make_unique<Window>(800, 600, "OpenGL Game Engine");
     if (window->getNativeWindow() == nullptr) {
         std::cout << "Failed to initialize Window!" << std::endl;
         return false;
@@ -35,9 +35,8 @@ bool Application::Initialize() {
 
     // ------------------------------
     
-
     // Create Camera
-    camera = new Camera();
+    camera = std::make_unique<Camera>();
 
     //Locks cursor
     glfwSetInputMode(window->getNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -52,32 +51,28 @@ bool Application::Initialize() {
     coreShader = new Shader("assets/Shaders/core.vert", "assets/Shaders/core.frag");
 
     // Load Textures & Material
-    assets.textures["obama"] = new Texture("assets/Textures/obama_sandwich.jpg", "texture_diffuse");
-    assets.textures["flag"] = new Texture("assets/Textures/community.png", "texture_diffuse");
+    assets.textures["obama"] = std::make_shared<Texture>("assets/Textures/obama_sandwich.jpg", "texture_diffuse");
+    assets.textures["flag"] = std::make_shared<Texture>("assets/Textures/community.png", "texture_diffuse");
 
-    assets.materials["obamaSandwich"] = new Material(assets.textures["obama"], 0);
-    assets.materials["communityFlag"] = new Material(assets.textures["flag"], 0);
+    assets.materials["obamaSandwich"] = std::make_shared<Material>(assets.textures["obama"], 0);
+    assets.materials["communityFlag"] = std::make_shared<Material>(assets.textures["flag"], 0);
 
     // Build Mesh & Model
     assets.meshes["cube"] = StandardMeshes::CreateCube();
     assets.meshes["sphere"] = StandardMeshes::CreateSphere();
 
-    assets.models["obamaCube"] = new Model(assets.meshes["cube"], assets.materials["obamaSandwich"]);
-    assets.models["flagCube"] = new Model(assets.meshes["cube"], assets.materials["communityFlag"]);
-    assets.models["sandwichSphere"] = new Model(assets.meshes["sphere"], assets.materials["obamaSandwich"]);
+    assets.models["obamaCube"] = std::make_shared<Model>(assets.meshes["cube"], assets.materials["obamaSandwich"]);
+    assets.models["flagCube"] = std::make_shared<Model>(assets.meshes["cube"], assets.materials["communityFlag"]);
+    assets.models["sandwichSphere"] = std::make_shared<Model>(assets.meshes["sphere"], assets.materials["obamaSandwich"]);
 
     // Create Objects
-    Object* obamaCube = new Object(assets.models["obamaCube"]);
-    Object* flagCube = new Object(assets.models["flagCube"]);
-    Object* sandwichSphere = new Object(assets.models["sandwichSphere"]);
-
-    objects.push_back(obamaCube);
-    objects.push_back(flagCube);
-    objects.push_back(sandwichSphere);
+    objects.push_back(std::make_unique<Object>(assets.models["obamaCube"]));
+    objects.push_back(std::make_unique<Object>(assets.models["flagCube"]));
+    objects.push_back(std::make_unique<Object>(assets.models["sandwichSphere"]));
 
     // Initial Object Setup
-    flagCube->transform.Translate(glm::vec3(0.0f, 2.0f, 0.0f));
-    sandwichSphere->transform.Translate(glm::vec3(0.0f, 0.0f, 3.0f));
+    objects[1]->transform.Translate(glm::vec3(0.0f, 2.0f, 0.0f));
+    objects[2]->transform.Translate(glm::vec3(0.0f, 0.0f, 3.0f));
 
     // Set starting time
     lastFrameTime = glfwGetTime();
@@ -91,7 +86,6 @@ void Application::Update(double dt) {
     window->processInput();
 
     // Transform Object
-    //objects[0]->transform.Rotate(60 * (float)dt, glm::vec3(1.0f, 1.0f, 0.0f));
     objects[1]->transform.Rotate(40 * (float)dt, glm::vec3(0.0f, 0.0f, 1.0f));
     objects[2]->transform.Rotate(50 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -108,7 +102,7 @@ void Application::Render() {
 
     camera->setUniforms(coreShader, window->getWidth(), window->getHeight());
 
-    for (Object* obj : objects) {
+    for (const auto& obj : objects) {
         obj->Render(coreShader);
     }
 
@@ -148,8 +142,6 @@ void Application::Run() {
 
 // --- Memory Cleanup ---
 void Application::Shutdown() {
-    for (Object* obj : objects) { delete obj; }
     objects.clear();
-    if (coreShader) { delete coreShader; coreShader = nullptr; }
-    if (window) { delete window;     window = nullptr; }
+    if (coreShader != nullptr) { delete coreShader; coreShader = nullptr; }
 }

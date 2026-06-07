@@ -3,17 +3,17 @@
 #include "Transform.h"
 #include "Model.h"
 #include "Shader.h"
+#include <memory>
 
 class Object
 {
 public:
 	Transform transform;
 
-	Object(Model* assignedModel);
+	Object(const std::shared_ptr<Model>& assignedModel);
 
 	void Render(Shader* shader);
 
 private:
-	Model* model;
+	std::shared_ptr<Model> model;
 };
-
