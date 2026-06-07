@@ -89,15 +89,20 @@ ModelNode Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     if (mesh->mMaterialIndex >= 0) {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-        // Check if a diffuse texture exists
+        // 1. Get the Diffuse Texture using the Global Asset Cache
         if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
             aiString str;
             material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
-            std::string texPath = directory + "/" + str.C_Str();
 
-            if (assetManager) diffuseMap = assetManager->getTexture(texPath, texPath, "texture_diffuse");
+            std::string assimpPath = str.C_Str();
+            size_t lastSlash = assimpPath.find_last_of("/\\");
+            std::string filename = (lastSlash != std::string::npos) ? assimpPath.substr(lastSlash + 1) : assimpPath;
+            std::string texPath = directory + "/" + filename;
+
+            if (assetManager) {
+                diffuseMap = assetManager->getTexture(filename, texPath, "texture_diffuse");
+            }
         }
-
 
         // 2. Get Shininess (The 'Ns' value in the .mtl file)
         material->Get(AI_MATKEY_SHININESS, shininess);
