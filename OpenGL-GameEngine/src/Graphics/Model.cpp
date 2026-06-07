@@ -8,8 +8,8 @@ Model::Model(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>&
     nodes.push_back({ mesh, material });
 }
 
-Model::Model(const std::string& path, AssetContainer* assets) : assetManager(assets) {
-    loadModel(path);
+Model::Model(const std::string& path, AssetContainer* assets, bool flipUVs) : assetManager(assets) {
+    loadModel(path, flipUVs);
 }
 
 // --- The Render Loop ---
@@ -20,9 +20,12 @@ void Model::Render(Shader* shader) {
     }
 }
 
-void Model::loadModel(const std::string& path) {
+void Model::loadModel(const std::string& path, bool flipUVs) {
+
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
+    unsigned int importFlags = aiProcess_Triangulate | aiProcess_GenSmoothNormals;
+    if (flipUVs) importFlags |= aiProcess_FlipUVs;
+    const aiScene* scene = importer.ReadFile(path, importFlags);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
@@ -94,6 +97,7 @@ ModelNode Model::processMesh(aiMesh* mesh, const aiScene* scene) {
             aiString str;
             material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
 
+            // Only get the filename and build custom path
             std::string assimpPath = str.C_Str();
             size_t lastSlash = assimpPath.find_last_of("/\\");
             std::string filename = (lastSlash != std::string::npos) ? assimpPath.substr(lastSlash + 1) : assimpPath;

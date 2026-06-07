@@ -39,7 +39,7 @@ std::shared_ptr<Model> AssetContainer::getModel(const std::string& key, const st
     return newMod;
 }
 
-std::shared_ptr<Model> AssetContainer::getModel(const std::string& key, const std::string& filepath) {
+std::shared_ptr<Model> AssetContainer::getModel(const std::string& key, const std::string& filepath, bool flipUVs) {
     auto it = models.find(key);
     if (it != models.end()) {
         if (std::shared_ptr<Model> sharedMod = it->second.lock()) {
@@ -47,7 +47,7 @@ std::shared_ptr<Model> AssetContainer::getModel(const std::string& key, const st
         }
     }
     // Create the new model, passing 'this' so it can use the texture cache
-    std::shared_ptr<Model> newMod = std::make_shared<Model>(filepath, this);
+    std::shared_ptr<Model> newMod = std::make_shared<Model>(filepath, this, flipUVs);
 
     models[key] = newMod;
     return newMod;
