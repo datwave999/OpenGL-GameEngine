@@ -64,12 +64,12 @@ bool Application::Initialize() {
 
     assets.models["obamaCube"] = new Model(assets.meshes["cube"], assets.materials["obamaSandwich"]);
     assets.models["flagCube"] = new Model(assets.meshes["cube"], assets.materials["communityFlag"]);
-    assets.models["flagSphere"] = new Model(assets.meshes["sphere"], assets.materials["communityFlag"]);
+    assets.models["sandwichSphere"] = new Model(assets.meshes["sphere"], assets.materials["obamaSandwich"]);
 
     // Create Objects
     Object* obamaCube = new Object(assets.models["obamaCube"]);
     Object* flagCube = new Object(assets.models["flagCube"]);
-    Object* sandwichSphere = new Object(assets.models["flagSphere"]);
+    Object* sandwichSphere = new Object(assets.models["sandwichSphere"]);
 
     objects.push_back(obamaCube);
     objects.push_back(flagCube);
@@ -91,7 +91,7 @@ void Application::Update(double dt) {
     window->processInput();
 
     // Transform Object
-    objects[0]->transform.Rotate(60 * (float)dt, glm::vec3(1.0f, 1.0f, 0.0f));
+    //objects[0]->transform.Rotate(60 * (float)dt, glm::vec3(1.0f, 1.0f, 0.0f));
     objects[1]->transform.Rotate(40 * (float)dt, glm::vec3(0.0f, 0.0f, 1.0f));
     objects[2]->transform.Rotate(50 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
 

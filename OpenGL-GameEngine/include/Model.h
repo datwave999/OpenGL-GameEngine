@@ -7,7 +7,6 @@
 #include "Material.h"
 #include "Shader.h"
 
-// A model is made up of one or more meshes, each needing its own material.
 struct ModelNode {
     Mesh* mesh;
     Material* material;
@@ -15,13 +14,12 @@ struct ModelNode {
 
 class Model {
 public:
-    // Constructor 1: Manual creation (Procedural shapes)
+    // Manual Creating
     Model(Mesh* mesh, Material* material);
-
-    // Constructor 2: External Asset creation (Assimp)
+    // Importing
     Model(const std::string& path);
 
-    // Renders all sub-meshes with their respective materials
+    // Rendering Each Node
     void Render(Shader* shader);
 
 private:

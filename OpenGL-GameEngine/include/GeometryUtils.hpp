@@ -6,7 +6,7 @@
 #include "Mesh.h"
 
 namespace GeometryUtils {
-
+    // Only used for Meshes with unique vertices for each face
     inline void CalculateFlatNormals(std::vector<Vertex>& vertices, const std::vector<GLuint>& indices) {
 
         for (size_t i = 0; i < indices.size(); i += 3) {
@@ -31,8 +31,7 @@ namespace GeometryUtils {
 
     inline void CalculateSmoothNormals(std::vector<Vertex>& vertices, const std::vector<GLuint>& indices) {
 
-        // 1. Reset all vertex normals to zero. 
-        // This is crucial in case the vertices had junk data or previous normals.
+        // 1. Reset all vertex normals
         for (Vertex& vertex : vertices) {
             vertex.Normal = glm::vec3(0.0f);
         }
@@ -51,20 +50,16 @@ namespace GeometryUtils {
             glm::vec3 edge1 = v1.Position - v0.Position;
             glm::vec3 edge2 = v2.Position - v0.Position;
 
-            // Compute the cross product (the perpendicular face normal).
-            // NOTE: We deliberately do NOT normalize this vector yet!
-            // The un-normalized cross product's magnitude is proportional to the triangle's area.
-            // This means larger triangles will have more "weight" in the final smoothed normal.
+            // Get the face normal (with magnitude)
             glm::vec3 faceNormal = glm::cross(edge1, edge2);
 
-            // Add this face's normal to all three of its vertices
+            // Add this face's normal to all three of its vertices (will average this later by normalizing)
             v0.Normal += faceNormal;
             v1.Normal += faceNormal;
             v2.Normal += faceNormal;
         }
 
         // 3. Normalize the final accumulated normals
-        // This averages out the directions of all the adjacent faces that shared this vertex.
         for (Vertex& vertex : vertices) {
             vertex.Normal = glm::normalize(vertex.Normal);
         }
