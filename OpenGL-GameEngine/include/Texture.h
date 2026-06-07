@@ -11,8 +11,10 @@ public:
 
 	Texture(const std::string& path, const std::string& type);
 
-	void Use(GLuint unitLocation = 0) const;
+	void Use(GLuint textureUnit = 0) const;
+
 	std::string getType() { return type; }
+	std::string getPath() { return path; }
 
 	~Texture();
 

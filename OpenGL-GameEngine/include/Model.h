@@ -12,6 +12,8 @@
 #include "Material.h"
 #include "Shader.h"
 
+class AssetContainer;
+
 struct ModelNode {
     std::shared_ptr<Mesh> mesh;
     std::shared_ptr<Material> material;
@@ -19,22 +21,18 @@ struct ModelNode {
 
 class Model {
 public:
-    // Manual Creating
     Model(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material);
-    // Importing
-    Model(const std::string& path);
+    Model(const std::string& path, AssetContainer* assets);
 
-    // Rendering The Model 
     void Render(Shader* shader);
-
 
 private:
     std::vector<ModelNode> nodes;
-    // Stores the directory of the loaded file (used later by Assimp to find textures)
     std::string directory;
 
-    // Internal helpers for assimp
+    AssetContainer* assetManager;
+
     void loadModel(const std::string& path);
     void processNode(aiNode* node, const aiScene* scene);
-    Mesh* processMesh(aiMesh* mesh, const aiScene* scene);
+    ModelNode processMesh(aiMesh* mesh, const aiScene* scene);
 };

@@ -16,6 +16,7 @@ public:
     std::shared_ptr<Texture> getTexture(const std::string& key, const std::string& filepath, const std::string& type);
     std::shared_ptr<Material> getMaterial(const std::string& key, const std::shared_ptr<Texture>& texture, int texUnit);
     std::shared_ptr<Model> getModel(const std::string& key, const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material);
+    std::shared_ptr<Model> getModel(const std::string& key, const std::string& filepath);
     std::shared_ptr<Mesh> getMesh(const std::string& key, const std::shared_ptr<Mesh>& newMesh);
 
     // --- Utilities ---

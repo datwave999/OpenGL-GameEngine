@@ -62,19 +62,24 @@ bool Application::Initialize() {
     auto cubeMesh = assets.getMesh("cube", StandardMeshes::CreateCube());
     auto sphereMesh = assets.getMesh("sphere", StandardMeshes::CreateSphere());
 
-    // 4. Get Models (from Meshes and Materials)
+    // 4. Get Models
+        // From Meshes and Materials
     auto obamaCubeModel = assets.getModel("obamaCube", cubeMesh, obamaMat);
     auto flagCubeModel = assets.getModel("flagCube", cubeMesh, flagMat);
     auto sandwichSphereModel = assets.getModel("sandwichSphere", sphereMesh, obamaMat);
+        // Import Models
+    auto sedan = assets.getModel("sedan", "assets/Models/sedan/sedan.obj");
 
     // 5. Create Objects (Takes exclusive ownership of the models via unique_ptr)
     objects.push_back(std::make_unique<Object>(obamaCubeModel));
     objects.push_back(std::make_unique<Object>(flagCubeModel));
     objects.push_back(std::make_unique<Object>(sandwichSphereModel));
+    objects.push_back(std::make_unique<Object>(sedan));
 
     // Initial Object Setup
     objects[1]->transform.Translate(glm::vec3(0.0f, 2.0f, 0.0f));
     objects[2]->transform.Translate(glm::vec3(0.0f, -1.0f, 3.0f));
+    objects[3]->transform.Translate(glm::vec3(2.0f, 0.0f, 0.0f));
 
     // Set starting time
     lastFrameTime = glfwGetTime();

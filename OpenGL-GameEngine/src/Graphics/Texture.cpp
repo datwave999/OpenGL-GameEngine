@@ -2,7 +2,7 @@
 
 #include <STB/stb_image.h>	
 
-Texture::Texture(const std::string& path, const std::string& type)
+Texture::Texture(const std::string& path, const std::string& type) : path(path), type(type), textureID(0)
 {
 
 	glGenTextures(1, &textureID);
