@@ -101,6 +101,19 @@ std::shared_ptr<Mesh> AssetContainer::getMesh(const std::string& key, const std:
     return newMesh;
 }
 
+std::shared_ptr<Shader> AssetContainer::getShader(const std::string& key, const std::string& vertPath, const std::string& fragPath) {
+    auto it = shaders.find(key);
+    if (it != shaders.end()) {
+        if (std::shared_ptr<Shader> shared = it->second.lock()) {
+            return shared;
+        }
+    }
+
+    std::shared_ptr<Shader> newShader = std::make_shared<Shader>(vertPath.c_str(), fragPath.c_str());
+    shaders[key] = newShader;
+    return newShader;
+}
+
 // --- Utilities ---
 
 void AssetContainer::CleanCache() {
@@ -123,6 +136,11 @@ void AssetContainer::CleanCache() {
         if (it->second.expired()) { it = models.erase(it); }
         else { ++it; }
     }
+
+    for (auto it = shaders.begin(); it != shaders.end(); ) {
+        if (it->second.expired()) { it = shaders.erase(it); }
+        else { ++it; }
+    }
 }
 
 void AssetContainer::Clear() {
@@ -130,6 +148,7 @@ void AssetContainer::Clear() {
     materials.clear();
     textures.clear();
     models.clear();
+    shaders.clear();
 }
 
 AssetContainer::~AssetContainer() {

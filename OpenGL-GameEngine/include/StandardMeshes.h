@@ -13,4 +13,7 @@ public:
 
     // flat plane of dimensions 100 x 1 x 100
     static std::shared_ptr<Mesh> CreatePlane(float uvScale = 1.0f);
+
+    // overlay mesh
+    static std::shared_ptr<Mesh> CreateOverlay();
 };

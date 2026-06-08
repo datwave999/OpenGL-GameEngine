@@ -66,10 +66,16 @@
     <ClCompile Include="src\Scene\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\StandardMeshes.cpp">
+    <ClCompile Include="src\Resources\StandardMeshes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Graphics\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\States\PlayState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\States\PauseState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,9 +131,20 @@
     <ClInclude Include="include\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\State.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PlayState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PauseState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\core.frag" />
     <None Include="assets\Shaders\core.vert" />
+    <None Include="assets\Shaders\overlay.vert" />
+    <None Include="assets\Shaders\overlay.frag" />
   </ItemGroup>
 </Project>

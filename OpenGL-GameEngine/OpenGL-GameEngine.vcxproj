@@ -148,6 +148,8 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\States\PauseState.cpp" />
+    <ClCompile Include="src\States\PlayState.cpp" />
     <ClCompile Include="src\Graphics\Model.cpp" />
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Input.cpp" />
@@ -165,7 +167,7 @@
     <ClCompile Include="src\Scene\Object.cpp" />
     <ClCompile Include="src\Scene\Transform.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Graphics\StandardMeshes.cpp" />
+    <ClCompile Include="src\Resources\StandardMeshes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AssetContainer.h" />
@@ -174,12 +176,15 @@
     <ClInclude Include="include\Buffer.h" />
     <ClInclude Include="include\GeometryUtils.hpp" />
     <ClInclude Include="include\Shader.h" />
+    <ClInclude Include="include\State.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\Material.h" />
     <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\PlayState.h" />
+    <ClInclude Include="include\PauseState.h" />
     <ClInclude Include="src\Headers\Shader.h" />
     <ClInclude Include="include\VertexArray.h" />
     <ClInclude Include="include\Texture.h" />
@@ -189,6 +194,8 @@
   <ItemGroup>
     <None Include="assets\Shaders\core.frag" />
     <None Include="assets\Shaders\core.vert" />
+    <None Include="assets\Shaders\overlay.frag" />
+    <None Include="assets\Shaders\overlay.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

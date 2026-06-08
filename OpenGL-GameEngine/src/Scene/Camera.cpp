@@ -11,8 +11,8 @@ Camera::Camera(glm::vec3 position) {
     Pitch = 0.0f;
 
     MovementSpeed = 5.0f;
-    MouseSensitivity = 0.1f;
-    FOV = 45.0f;
+    MouseSensitivity = 0.05f;
+    FOV = 60.0f;
 
     updateCameraVectors();
 }
@@ -22,7 +22,8 @@ void Camera::Update(double dt) {
     float velocity = MovementSpeed * static_cast<float>(dt);
 
     // TEMP WAY TO SPEED UP
-    if (Input::getKeyState(GLFW_KEY_LEFT_SHIFT)) velocity *= 3.0f;
+    if (Input::keyWentDown(GLFW_KEY_LEFT_SHIFT)) MovementSpeed *= 3.0f;
+    if (Input::keyWentUp(GLFW_KEY_LEFT_SHIFT)) MovementSpeed /= 3.0f;
 
     if (Input::getKeyState(GLFW_KEY_W)) Position += Front * velocity;
     if (Input::getKeyState(GLFW_KEY_S)) Position -= Front * velocity;

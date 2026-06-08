@@ -21,6 +21,7 @@ public:
     std::shared_ptr<Model> getModel(const std::string& key, const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material);
     std::shared_ptr<Model> getModel(const std::string& key, const std::string& filepath, bool flipUVs = true);
     std::shared_ptr<Mesh> getMesh(const std::string& key, const std::shared_ptr<Mesh>& newMesh);
+    std::shared_ptr<Shader> getShader(const std::string& key, const std::string& vertPath, const std::string& fragPath);
 
     // --- Utilities ---
     void CleanCache();
@@ -31,4 +32,5 @@ private:
     std::unordered_map<std::string, std::weak_ptr<Material>> materials;
     std::unordered_map<std::string, std::weak_ptr<Mesh>> meshes;
     std::unordered_map<std::string, std::weak_ptr<Model>> models;
+    std::unordered_map<std::string, std::weak_ptr<Shader>> shaders;
 };

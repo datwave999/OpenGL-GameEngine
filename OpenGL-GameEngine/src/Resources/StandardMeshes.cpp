@@ -166,3 +166,20 @@ std::shared_ptr<Mesh> StandardMeshes::CreatePlane(float uvScale) {
 
     return std::make_shared<Mesh>(vertices, indices);
 }
+
+std::shared_ptr<Mesh> StandardMeshes::CreateOverlay()
+{
+    std::vector<Vertex> quadVertices = {
+    {{-1.0f,  1.0f,  0.0f},   {0.0f, 0.0f, 1.0f},   {0.0f, 1.0f}},
+    {{-1.0f, -1.0f,  0.0f},   {0.0f, 0.0f, 1.0f},   {0.0f, 0.0f}},
+    {{ 1.0f, -1.0f,  0.0f},   {0.0f, 0.0f, 1.0f},   {1.0f, 0.0f}},
+    {{ 1.0f,  1.0f,  0.0f},   {0.0f, 0.0f, 1.0f},   {1.0f, 1.0f}}
+    };
+
+    std::vector<GLuint> quadIndices = {
+        0, 1, 2,
+        0, 2, 3
+    };
+
+    return std::make_unique<Mesh>(quadVertices, quadIndices);
+}

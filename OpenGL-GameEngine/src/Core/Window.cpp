@@ -49,16 +49,7 @@ void Window::pollEvents() {
 }
 
 void Window::processInput() {
-
-	if (Input::keyWentDown(GLFW_KEY_ESCAPE)) {
-		glfwSetWindowShouldClose(window, true);
-	}
-
-	if (Input::keyWentDown(GLFW_KEY_TAB)) {
-		int currentMode = glfwGetInputMode(window, GLFW_CURSOR);
-		if (currentMode == GLFW_CURSOR_DISABLED) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	}
+	
 }
 
 int Window::getWidth() const {
