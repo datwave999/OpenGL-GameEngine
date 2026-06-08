@@ -1,7 +1,10 @@
 #include "Texture.h"
 
-#include <STB/stb_image.h>	
+#include <STB/stb_image.h>
 
+Texture::Texture(GLuint texID, const std::string& type) : textureID(texID), type(type) {}
+
+// Load From File
 Texture::Texture(const std::string& path, const std::string& type) : path(path), type(type), textureID(0)
 {
 
@@ -25,9 +28,56 @@ Texture::Texture(const std::string& path, const std::string& type) : path(path),
 	}
 	else {
 		std::cerr << "Failed to load texture: " << path << std::endl;
+		textureID = 0;
 	}
 
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	stbi_image_free(data);
+}
+
+// Create from RGBA
+Texture::Texture(glm::vec4 color, const std::string& type) : type(type), textureID(0)
+{
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	// Create a 1-pixel array holding your color data
+	float pixel[] = { color.r, color.g, color.b, color.a};
+
+	// Upload the single pixel to the GPU
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, pixel);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+// Missing Texture for Debugging
+unsigned int Texture::CreateDefaultTexture() {
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	unsigned char pixels[] = {
+		255,   0, 255, 255, // Top-Left: Magenta
+		  0,   0,   0, 255, // Top-Right: Black
+		  0,   0,   0, 255, // Bottom-Left: Black
+		255,   0, 255, 255  // Bottom-Right: Magenta
+	};
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return textureID;
 }
 
 void Texture::Use(GLuint textureUnit) const {

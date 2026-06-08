@@ -30,7 +30,7 @@ Window::Window(int widthInt, int heightInt, const char* title) : width(widthInt)
 		return;
 	}
 
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, width, height);
 
 	// Callback to handle resizing
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -49,8 +49,15 @@ void Window::pollEvents() {
 }
 
 void Window::processInput() {
+
 	if (Input::keyWentDown(GLFW_KEY_ESCAPE)) {
 		glfwSetWindowShouldClose(window, true);
+	}
+
+	if (Input::keyWentDown(GLFW_KEY_TAB)) {
+		int currentMode = glfwGetInputMode(window, GLFW_CURSOR);
+		if (currentMode == GLFW_CURSOR_DISABLED) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 }
 

@@ -20,8 +20,8 @@ public:
 	~Mesh();
 
 private:
-	Buffer* VBO;
-	Buffer* EBO;
+	std::unique_ptr<Buffer> VBO;
+	std::unique_ptr<Buffer> EBO;
 	VertexArray VAO;
 
 	GLsizei indexCount;

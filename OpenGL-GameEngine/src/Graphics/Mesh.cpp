@@ -4,8 +4,8 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<GLuint>& indic
 {
 	VAO.bind();
 
-	VBO = new Buffer(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
-	EBO = new Buffer(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+	VBO = std::make_unique<Buffer>(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+	EBO = std::make_unique<Buffer>(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
 	// Position (Location 0) - 3 floats
 	VAO.addBuffer(*VBO, 0, 3, GL_FLOAT, sizeof(Vertex), offsetof(Vertex, Position));
@@ -25,8 +25,6 @@ void Mesh::RenderMesh()
 
 Mesh::~Mesh()
 {
-	delete VBO;
-	delete EBO;
 }
 
 

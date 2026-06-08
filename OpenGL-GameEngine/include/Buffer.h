@@ -16,6 +16,9 @@ public:
 	void bind() const;
 	void unbind() const;
 
+	// Getters
+	GLenum getBufferType() const { return bufferType; }
+
 	~Buffer();
 
 private:

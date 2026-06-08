@@ -8,20 +8,34 @@ class Transform {
 public:
     Transform();
 
+    // Transform
     void Translate(glm::vec3 offset);
     void MoveRelative(glm::vec3 offset);
-
-    void Scale(glm::vec3 newScale);
-
     void Rotate(float degrees, glm::vec3 axis);
 
+    // Setters
+    void SetPosition(glm::vec3 newPos);
     void SetRotation(glm::quat newRotation);
     void SetRotation(float pitchX, float yawY, float rollZ);
+    void SetScale(glm::vec3 newScale);
 
-    glm::quat GetRotation() const;
-    glm::mat4 getModelMatrix() const;
+    // Getters
+    const glm::vec3& GetPosition() const { return position; }
+    const glm::vec3& GetScale() const { return scale; }
+    const glm::quat& GetRotation() const { return rotation; }
+
+    // Directional Helpers
+    glm::vec3 GetForward() const;
+    glm::vec3 GetRight() const;
+    glm::vec3 GetUp() const;
+
+    // The Model Matrix
+    glm::mat4 getModelMatrix();
 
 private:
+    glm::mat4 ModelMatrix;
+    bool isTransformed;
+
     glm::vec3 position;
     glm::quat rotation;
     glm::vec3 scale;

@@ -4,43 +4,43 @@
 
 constexpr float PI = 3.14159265359f;
 
-std::shared_ptr<Mesh> StandardMeshes::CreateCube() {
+std::shared_ptr<Mesh> StandardMeshes::CreateCube(float uvScale) {
     std::vector<Vertex> vertices = {
         // FRONT FACE
         {{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 0
-        {{ 0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 1
-        {{ 0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // 2
-        {{-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 3
+        {{ 0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 1
+        {{ 0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, uvScale}}, // 2
+        {{-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, uvScale}}, // 3
 
         // BACK FACE
-        {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 4 
+        {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 4 
         {{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 5
-        {{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 6
-        {{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // 7
+        {{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, uvScale}}, // 6
+        {{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, uvScale}}, // 7
 
         // LEFT FACE
         {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 8
-        {{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 9
-        {{-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // 10
-        {{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 11
+        {{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 9
+        {{-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, uvScale}}, // 10
+        {{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, uvScale}}, // 11
 
         // RIGHT FACE
         {{ 0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 12
-        {{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 13
-        {{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // 14
-        {{ 0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 15
+        {{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 13
+        {{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, uvScale}}, // 14
+        {{ 0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, uvScale}}, // 15
 
         // TOP FACE
         {{-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 16
-        {{ 0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 17
-        {{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // 18
-        {{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 19
+        {{ 0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 17
+        {{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, uvScale}}, // 18
+        {{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, uvScale}}, // 19
 
         // BOTTOM FACE
         {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 20
-        {{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f}}, // 21
-        {{ 0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // 22
-        {{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}  // 23
+        {{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 21
+        {{ 0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, uvScale}}, // 22
+        {{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, uvScale}}  // 23
     };
 
     std::vector<GLuint> indices = {
@@ -107,6 +107,62 @@ std::shared_ptr<Mesh> StandardMeshes::CreateSphere(int sectors, int stacks) {
     }
 
     GeometryUtils::CalculateSmoothNormals(vertices, indices);
+
+    return std::make_shared<Mesh>(vertices, indices);
+}
+
+std::shared_ptr<Mesh> StandardMeshes::CreatePlane(float uvScale) {
+
+    const float t = 0.05f; // Half-thickness
+
+    std::vector<Vertex> vertices = {
+        // FRONT FACE (U repeats, V stays 1 so the thin edge doesn't squish)
+        {{-0.5f, -t,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 0
+        {{ 0.5f, -t,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 1
+        {{ 0.5f,  t,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 1.0f}}, // 2
+        {{-0.5f,  t,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 3
+
+        // BACK FACE
+        {{-0.5f, -t, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 4 
+        {{ 0.5f, -t, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 5
+        {{ 0.5f,  t, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 6
+        {{-0.5f,  t, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 1.0f}}, // 7
+
+        // LEFT FACE
+        {{-0.5f, -t, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 8
+        {{-0.5f, -t,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 9
+        {{-0.5f,  t,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 1.0f}}, // 10
+        {{-0.5f,  t, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 11
+
+        // RIGHT FACE
+        {{ 0.5f, -t,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 12
+        {{ 0.5f, -t, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 13
+        {{ 0.5f,  t, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 1.0f}}, // 14
+        {{ 0.5f,  t,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // 15
+
+        // TOP FACE (U and V both repeat by uvScale)
+        {{-0.5f,  t,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 16
+        {{ 0.5f,  t,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 17
+        {{ 0.5f,  t, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, uvScale}}, // 18
+        {{-0.5f,  t, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, uvScale}}, // 19
+
+        // BOTTOM FACE (U and V both repeat by uvScale)
+        {{-0.5f, -t, -0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 20
+        {{ 0.5f, -t, -0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, 0.0f}}, // 21
+        {{ 0.5f, -t,  0.5f}, {0.0f, 0.0f, 0.0f}, {uvScale, uvScale}}, // 22
+        {{-0.5f, -t,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, uvScale}}  // 23
+    };
+
+    std::vector<GLuint> indices = {
+        0, 1, 2,  2, 3, 0,       // Front
+        4, 5, 6,  6, 7, 4,       // Back
+        8, 9, 10, 10, 11, 8,     // Left
+        12, 13, 14, 14, 15, 12,  // Right
+        16, 17, 18, 18, 19, 16,  // Top
+        20, 21, 22, 22, 23, 20   // Bottom
+    };
+
+    GeometryUtils::CalculateFlatNormals(vertices, indices);
 
     return std::make_shared<Mesh>(vertices, indices);
 }

@@ -21,7 +21,7 @@ Application::~Application() {
 bool Application::Initialize() {
 
     // Create Window
-    window = std::make_unique<Window>(800, 600, "OpenGL Game Engine");
+    window = std::make_unique<Window>(1920, 1080, "OpenGL Game Engine");
     if (window->getNativeWindow() == nullptr) {
         std::cout << "Failed to initialize Window!" << std::endl;
         return false;
@@ -50,23 +50,28 @@ bool Application::Initialize() {
     // Compile Shaders
     coreShader = new Shader("assets/Shaders/core.vert", "assets/Shaders/core.frag");
 
+    // 3. Register Meshes (Using StandardMeshes)
+    auto cubeMesh = assets.getMesh("cube", StandardMeshes::CreateCube(2.0f));
+    auto sphereMesh = assets.getMesh("sphere", StandardMeshes::CreateSphere());
+    auto planeMesh = assets.getMesh("plane", StandardMeshes::CreatePlane(10.0f));
+
     // 1. Get Textures 
-    auto obamaTex = assets.getTexture("obama", "assets/Textures/obama_sandwich.jpg", "texture_diffuse");
-    auto flagTex = assets.getTexture("flag", "assets/Textures/community.png", "texture_diffuse");
+    auto obamaTex = assets.getTexture("obama", "assets/Textures/obama_sandwich.jpg");
+    auto flagTex = assets.getTexture("flag", "assets/Textures/community.png");
+    auto greyPrototypeTex = assets.getTexture("prototypeGrey", "assets/Textures/PNG/Light/texture_08.png");
+    auto greyColor = assets.getTexture("grey", glm::vec4(0.459f, 0.443f, 0.471f, 1.0f));
 
     // 2. Get Materials (from Textures)
     auto obamaMat = assets.getMaterial("obamaSandwich", obamaTex, 0);
     auto flagMat = assets.getMaterial("communityFlag", flagTex, 0);
-
-    // 3. Register Meshes (Using StandardMeshes)
-    auto cubeMesh = assets.getMesh("cube", StandardMeshes::CreateCube());
-    auto sphereMesh = assets.getMesh("sphere", StandardMeshes::CreateSphere());
+    auto greyMat = assets.getMaterial("greyFloor", greyPrototypeTex, 0);
 
     // 4. Get Models
         // From Meshes and Materials
     auto obamaCubeModel = assets.getModel("obamaCube", cubeMesh, obamaMat);
     auto flagCubeModel = assets.getModel("flagCube", cubeMesh, flagMat);
     auto sandwichSphereModel = assets.getModel("sandwichSphere", sphereMesh, obamaMat);
+    auto floorModel = assets.getModel("floor", planeMesh, greyMat);
         // Import Models
     auto sedan = assets.getModel("sedan", "assets/Models/sedan/sedan.obj", false);
     auto race = assets.getModel("race", "assets/Models/race/race.obj", false);
@@ -77,12 +82,15 @@ bool Application::Initialize() {
     objects.push_back(std::make_unique<Object>(sandwichSphereModel));
     objects.push_back(std::make_unique<Object>(sedan));
     objects.push_back(std::make_unique<Object>(race));
+    objects.push_back(std::make_unique<Object>(floorModel));
 
     // Initial Object Setup
-    objects[1]->transform.Translate(glm::vec3(0.0f, 2.0f, 0.0f));
-    objects[2]->transform.Translate(glm::vec3(0.0f, -1.0f, 3.0f));
-    objects[3]->transform.Translate(glm::vec3(2.0f, 0.0f, 0.0f));
-    objects[4]->transform.Translate(glm::vec3(-2.0f, 0.0f, 0.0f));
+    objects[1]->transform.SetPosition(glm::vec3(0.0f, 2.0f, 0.0f));
+    objects[2]->transform.SetPosition(glm::vec3(0.0f, -1.0f, 3.0f));
+    objects[3]->transform.SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
+    objects[4]->transform.SetPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
+    objects[5]->transform.SetPosition(glm::vec3(0.0f, -1.0f, 0.0f));
+    objects[5]->transform.SetScale(glm::vec3(100.0f, 0.1f, 100.0f));
 
     // Set starting time
     lastFrameTime = glfwGetTime();
@@ -98,6 +106,10 @@ void Application::Update(double dt) {
     // Transform Object
     objects[1]->transform.Rotate(40 * (float)dt, glm::vec3(0.0f, 0.0f, 1.0f));
     objects[2]->transform.Rotate(50 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
+
+    // car go brr
+    objects[4]->transform.MoveRelative(glm::vec3(0.0f, 0.0f, 2.0f) * float(dt));
+    objects[4]->transform.Rotate(30 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
     camera->Update(dt);
     camera->processMouseScroll(Input::getScrollDY());
