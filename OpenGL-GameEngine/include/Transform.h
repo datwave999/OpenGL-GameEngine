@@ -29,11 +29,16 @@ public:
     glm::vec3 GetRight() const;
     glm::vec3 GetUp() const;
 
-    // The Model Matrix
+    // Matrices
     glm::mat4 getModelMatrix();
+    glm::mat3 getNormalMatrix();
 
 private:
+    // Helper to update the matrices
+    void UpdateMatrices();
+
     glm::mat4 ModelMatrix;
+    glm::mat3 NormalMatrix;
     bool isTransformed;
 
     glm::vec3 position;

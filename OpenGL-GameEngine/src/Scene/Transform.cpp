@@ -38,6 +38,8 @@ void Transform::Rotate(float degrees, glm::vec3 axis) {
 void Transform::SetPosition(glm::vec3 newPos)
 {
     position = newPos;
+
+    isTransformed = true;
 }
 
 void Transform::SetRotation(glm::quat newRotation) {
@@ -77,18 +79,27 @@ glm::vec3 Transform::GetUp() const
 }
 
 
-// Final Model Matrix
+// Final Model & Normal Matrices
 
-glm::mat4 Transform::getModelMatrix() {
-
+void Transform::UpdateMatrices() {
     if (isTransformed) {
         ModelMatrix = glm::mat4(1.0f);
         ModelMatrix = glm::translate(ModelMatrix, position);
         ModelMatrix = ModelMatrix * glm::mat4_cast(rotation);
         ModelMatrix = glm::scale(ModelMatrix, scale);
 
+        NormalMatrix = glm::transpose(glm::inverse(glm::mat3(ModelMatrix)));
+
         isTransformed = false;
     }
+}
 
+glm::mat4 Transform::getModelMatrix() {
+    UpdateMatrices();
     return ModelMatrix;
+}
+
+glm::mat3 Transform::getNormalMatrix() {
+    UpdateMatrices();
+    return NormalMatrix;
 }
