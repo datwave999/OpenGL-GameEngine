@@ -80,25 +80,39 @@ GLuint Shader::compileShader(const char* filepath, GLenum type)
 	return theShader;
 }
 
+// Caching uniform locations
+GLint Shader::GetUniformLocation(const std::string& name) const {
+
+	if (uniformLocationCache.find(name) != uniformLocationCache.end()) {
+		return uniformLocationCache[name];
+	}
+	GLint location = glGetUniformLocation(shaderID, name.c_str());
+
+	if (location == -1) std::cout << "Warning: uniform '" << name << "' doesn't exist or isn't used!" << std::endl;
+	
+	uniformLocationCache[name] = location;
+	return location;
+}
+
 // Uniform Setters in shader
 void Shader::setUniform(const std::string& name, bool value) const {
-	glUniform1i(glGetUniformLocation(shaderID, name.c_str()), (int)value);
+	glUniform1i(GetUniformLocation(name), (int)value);
 }
 
 void Shader::setUniform(const std::string& name, int value) const {
-	glUniform1i(glGetUniformLocation(shaderID, name.c_str()), value);
+	glUniform1i(GetUniformLocation(name), value);
 }
 
 void Shader::setUniform(const std::string& name, float value) const {
-	glUniform1f(glGetUniformLocation(shaderID, name.c_str()), value);
+	glUniform1f(GetUniformLocation(name), value);
 }
 
 void Shader::setUniform(const std::string& name, const glm::vec3& value) const {
-	glUniform3fv(glGetUniformLocation(shaderID, name.c_str()), 1, &value[0]);
+	glUniform3fv(GetUniformLocation(name), 1, &value[0]);
 }
 
 void Shader::setUniform(const std::string& name, const glm::mat4& mat) const {
-	glUniformMatrix4fv(glGetUniformLocation(shaderID, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
 }
 
 

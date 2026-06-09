@@ -32,11 +32,11 @@ bool Application::Initialize() {
     glfwSetCursorPosCallback(window->getNativeWindow(), Input::cursorPosCallback); 
     glfwSetScrollCallback(window->getNativeWindow(), Input::mouseWheelCallback);
 
-    // 4. Set starting time
-    lastFrameTime = glfwGetTime();
-
-    // 5. START THE GAME
+    // 4. START THE GAME
     PushState(std::make_unique<PlayState>());
+
+    // 5. Set starting time
+    lastFrameTime = glfwGetTime();
 
     return true;
 }

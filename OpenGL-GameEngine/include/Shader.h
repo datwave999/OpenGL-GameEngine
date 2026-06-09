@@ -35,4 +35,8 @@ public:
 
 private:
 	GLuint shaderID = 0;
+
+	// Caching uniform locations
+	mutable std::unordered_map<std::string, GLint> uniformLocationCache;
+	GLint GetUniformLocation(const std::string& name) const;
 };
