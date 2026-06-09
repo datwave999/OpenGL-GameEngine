@@ -61,7 +61,9 @@ namespace GeometryUtils {
 
         // 3. Normalize the final accumulated normals
         for (Vertex& vertex : vertices) {
-            vertex.Normal = glm::normalize(vertex.Normal);
+            if (glm::length(vertex.Normal) > 0.0f) {
+                vertex.Normal = glm::normalize(vertex.Normal);
+            }
         }
     }
 

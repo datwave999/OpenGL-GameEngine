@@ -12,6 +12,7 @@ public:
     void Translate(glm::vec3 offset);
     void MoveRelative(glm::vec3 offset);
     void Rotate(float degrees, glm::vec3 axis);
+    void RotateRelative(float degrees, glm::vec3 axis);
 
     // Setters
     void SetPosition(glm::vec3 newPos);

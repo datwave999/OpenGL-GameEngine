@@ -140,6 +140,9 @@
     <ClInclude Include="include\PauseState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Uniform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\core.frag" />

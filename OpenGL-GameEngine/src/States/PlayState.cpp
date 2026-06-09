@@ -50,8 +50,8 @@ void PlayState::Initialize(Application* app) {
     auto flagCubeModel = assets.getModel("flagCube", cubeMesh, flagMat);
     auto sandwichSphereModel = assets.getModel("sandwichSphere", sphereMesh, obamaMat);
     auto floorModel = assets.getModel("floor", planeMesh, greyMat);
-    auto sedan = assets.getModel("sedan", "assets/Models/sedan/sedan.obj", false);
-    auto race = assets.getModel("race", "assets/Models/race/race.obj", false);
+    auto sedan = assets.getModel("sedan", "assets/Models/sedan/sedan.obj");
+    auto race = assets.getModel("race", "assets/Models/race/race.obj");
 
     // 8. Create Objects 
     objects.push_back(std::make_unique<Object>(obamaCubeModel));
@@ -97,6 +97,7 @@ void PlayState::Render(Application* app) {
     for (const auto& obj : objects) {
         obj->Render(coreShader.get());
     }
+
 
     coreShader->disableShader();
 }

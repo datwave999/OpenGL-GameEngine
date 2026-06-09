@@ -22,7 +22,7 @@ struct ModelNode {
 class Model {
 public:
     Model(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material);
-    Model(const std::string& path, AssetContainer* assets, bool flipUVs = true);
+    Model(const std::string& path, AssetContainer* assets, bool flipUVs = false);
 
     void Render(Shader* shader);
 

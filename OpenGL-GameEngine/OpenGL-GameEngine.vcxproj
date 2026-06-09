@@ -177,6 +177,7 @@
     <ClInclude Include="include\GeometryUtils.hpp" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\State.h" />
+    <ClInclude Include="include\Uniform.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\Input.h" />

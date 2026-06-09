@@ -9,7 +9,7 @@ void Material::Use(Shader* shader) {
 
     diffuseMap->Use(textureUnit);
 
-    shader->setUniform("theTexture", textureUnit);
+    shader->setUniform(Uniform::texture1, textureUnit);
 
     // shader->setUniform("material.shininess", shininess);
     // shader->setUniform("material.specularIntensity", specularIntensity);

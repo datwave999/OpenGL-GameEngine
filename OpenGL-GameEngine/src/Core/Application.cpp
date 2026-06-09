@@ -85,7 +85,8 @@ void Application::Render() {
 // --- Main Engine Loop ---
 void Application::Run() {
     while (!window->shouldClose() && !states.empty()) {
-        
+        window->pollEvents();
+
         // 1. Calculate Delta Time 
         double currentFrameTime = glfwGetTime();
         double dt = currentFrameTime - lastFrameTime;
@@ -109,8 +110,7 @@ void Application::Run() {
 
         // 4. End of Frame Tasks
         Input::EndFrame();     
-        window->swapBuffers();
-        window->pollEvents();    
+        window->swapBuffers();  
     }
 }
 

@@ -7,7 +7,9 @@
 #include<sstream>
 #include<streambuf>
 #include<string>
+#include<array>
 
+#include"Uniform.h"
 
 #include<glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
@@ -25,12 +27,12 @@ public:
 	GLuint compileShader(const char* filepath, GLenum type);
 
 	// uniform functions
-	void setUniform(const std::string& name, bool value) const;
-	void setUniform(const std::string& name, int value) const;
-	void setUniform(const std::string& name, float value) const;
-	void setUniform(const std::string& name, const glm::vec3& value) const;
-	void setUniform(const std::string& name, const glm::mat4& mat) const;
-	void setUniform(const std::string& name, const glm::mat3& mat) const;
+	void setUniform(Uniform name, bool value) const;
+	void setUniform(Uniform name, int value) const;
+	void setUniform(Uniform name, float value) const;
+	void setUniform(Uniform name, const glm::vec3& value) const;
+	void setUniform(Uniform name, const glm::mat4& mat) const;
+	void setUniform(Uniform name, const glm::mat3& mat) const;
 
 	~Shader();
 
@@ -38,6 +40,7 @@ private:
 	GLuint shaderID = 0;
 
 	// Caching uniform locations
-	mutable std::unordered_map<std::string, GLint> uniformLocationCache;
-	GLint GetUniformLocation(const std::string& name) const;
+	mutable std::array<GLint, static_cast<size_t>(Uniform::NUM_UNIFORMS)> uniformLocationCache;
+
+	GLint GetUniformLocation(Uniform name) const;
 };

@@ -52,8 +52,8 @@ void Camera::Update(double dt) {
 
 // --- DELEGATION ---
 void Camera::setUniforms(Shader* shader, int screenWidth, int screenHeight) const {
-    shader->setUniform("view", getViewMatrix());
-    shader->setUniform("projection", getProjectionMatrix(static_cast<float>(screenWidth), static_cast<float>(screenHeight)));
+    shader->setUniform(Uniform::view, getViewMatrix());
+    shader->setUniform(Uniform::projection, getProjectionMatrix(static_cast<float>(screenWidth), static_cast<float>(screenHeight)));
 }
 
 // --- GETTERS ---

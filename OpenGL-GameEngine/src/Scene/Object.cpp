@@ -6,8 +6,8 @@ Object::Object(const std::shared_ptr<Model>& assignedModel) : model(assignedMode
 void Object::Render(Shader* shader) {
 	if (!model) return;
 
-	shader->setUniform("model", transform.getModelMatrix());
-	shader->setUniform("normalMatrix", transform.getNormalMatrix());
+	shader->setUniform(Uniform::model, transform.getModelMatrix());
+	shader->setUniform(Uniform::normalMatrix, transform.getNormalMatrix());
 
 	model->Render(shader);
 }

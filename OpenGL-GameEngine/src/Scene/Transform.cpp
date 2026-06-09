@@ -33,6 +33,15 @@ void Transform::Rotate(float degrees, glm::vec3 axis) {
     isTransformed = true;
 }
 
+void Transform::RotateRelative(float degrees, glm::vec3 axis)
+{
+    glm::quat rot = glm::angleAxis(glm::radians(degrees), glm::normalize(axis));
+    rotation = rotation * rot;
+    rotation = glm::normalize(rotation);
+
+    isTransformed = true;
+}
+
 // Setters
 
 void Transform::SetPosition(glm::vec3 newPos)
