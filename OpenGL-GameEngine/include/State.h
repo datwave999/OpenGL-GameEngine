@@ -14,4 +14,7 @@ public:
 
     // Called every frame (graphics)
     virtual void Render(Application* app) = 0;
+
+    // Stop rendering states below an Opaque state
+    virtual bool isOpaque() const { return false; }
 };

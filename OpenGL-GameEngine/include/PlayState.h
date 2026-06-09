@@ -17,6 +17,7 @@ public:
     void Initialize(Application* app) override;
     void Update(Application* app, double dt) override;
     void Render(Application* app) override;
+    bool isOpaque() const override { return true; }
 
 private:
     // --- Game Systems ---

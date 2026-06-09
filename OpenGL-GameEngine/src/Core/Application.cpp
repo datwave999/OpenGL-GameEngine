@@ -70,11 +70,17 @@ void Application::Render() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Render all states from bottom to top
-    for (const auto& state : states) {
-        state->Render(this);
+    // Render all states from highest opaque state to top
+    int startIndex = 0;
+    for (int i = states.size() - 1; i >= 0; i--) {
+        if (states[i]->isOpaque()) {
+            startIndex = i;
+            break;
+        }
     }
+    for (int i = startIndex; i < states.size(); i++) states[i]->Render(this);
 }
+
 
 // --- Main Engine Loop ---
 void Application::Run() {

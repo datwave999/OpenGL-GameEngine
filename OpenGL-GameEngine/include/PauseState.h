@@ -15,6 +15,7 @@ public:
     void Initialize(Application* app) override;
     void Update(Application* app, double dt) override;
     void Render(Application* app) override;
+    bool isOpaque() const override { return false; }
 
 private:
     std::shared_ptr<Shader> overlayShader;
