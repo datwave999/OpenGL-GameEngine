@@ -129,20 +129,20 @@ void PlayState::Update(Application* app, float dt) {
     // --- UPDATE CAMERA ---
     camera->Update(dt);
     camera->processMouseScroll(Input::getScrollDY());
+    camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
 }
 
 void PlayState::Render(Application* app) {
     // Core shader for Objects
     coreShader->enableShader();
 
-        camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
         coreShader->setUniform(Uniform::cameraPos, camera->getPosition());
 
         for (const auto& obj : objects) {
             obj->Render(coreShader.get());
         }
 
-        coreShader->disableShader();
+    coreShader->disableShader();
 
     // Unlit shader for Light Objects
     unlitShader->enableShader();
