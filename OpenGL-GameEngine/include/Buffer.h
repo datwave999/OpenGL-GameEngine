@@ -16,7 +16,11 @@ public:
 	void bind() const;
 	void unbind() const;
 
+	// Update existing buffer data (for UBOs)
+	void updateData(GLintptr offset, GLsizeiptr size, const void* data) const;
+
 	// Getters
+	GLuint getBufferID() const { return bufferID; }
 	GLenum getBufferType() const { return bufferType; }
 
 	~Buffer();

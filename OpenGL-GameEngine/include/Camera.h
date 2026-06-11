@@ -2,9 +2,15 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-// Forward Declaration for Shader*
-class Shader;
+#include <memory>  
+#include "Buffer.h"
+
+struct CameraMatrices {
+    glm::mat4 projection;
+    glm::mat4 view;
+};
 
 class Camera
 {
@@ -14,7 +20,8 @@ public:
 	void Update(double dt);
 
 	// Delegation
-	void setUniforms(Shader* shader, int screenWidth, int screenHeight) const;
+    void InitUBO();
+    void UpdateUBO(int screenWidth, int screenHeight);
 
     // --- GETTERS ---
     glm::vec3 getPosition() const;
@@ -48,5 +55,8 @@ private:
 
     // Internal Math
     void updateCameraVectors();
+
+    // Camera uniforms
+    std::unique_ptr<Buffer> cameraUBO;
 };
 

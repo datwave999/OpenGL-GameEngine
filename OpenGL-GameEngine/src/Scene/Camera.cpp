@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 #include "Input.h" 
-#include "Shader.h"
+
 
 Camera::Camera(glm::vec3 position) {
     Position = position;
@@ -15,6 +15,11 @@ Camera::Camera(glm::vec3 position) {
     FOV = 60.0f;
 
     updateCameraVectors();
+}
+
+void Camera::InitUBO() {
+    cameraUBO = std::make_unique<Buffer>(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, cameraUBO->getBufferID());
 }
 
 void Camera::Update(double dt) {
@@ -51,9 +56,15 @@ void Camera::Update(double dt) {
 }
 
 // --- DELEGATION ---
-void Camera::setUniforms(Shader* shader, int screenWidth, int screenHeight) const {
-    shader->setUniform(Uniform::view, getViewMatrix());
-    shader->setUniform(Uniform::projection, getProjectionMatrix(static_cast<float>(screenWidth), static_cast<float>(screenHeight)));
+void Camera::UpdateUBO(int screenWidth, int screenHeight) {
+    if (!cameraUBO) return;
+
+    CameraMatrices matrices;
+
+    matrices.projection = getProjectionMatrix(static_cast<float>(screenWidth), static_cast<float>(screenHeight));
+    matrices.view = getViewMatrix();
+
+    cameraUBO->updateData(0, sizeof(CameraMatrices), &matrices);
 }
 
 // --- GETTERS ---

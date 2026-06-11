@@ -72,7 +72,7 @@ void Application::Render() {
 
     // Render all states from highest opaque state to top
     int startIndex = 0;
-    for (int i = states.size() - 1; i >= 0; i--) {
+    for (int i = (int)states.size() - 1; i >= 0; i--) {
         if (states[i]->isOpaque()) {
             startIndex = i;
             break;

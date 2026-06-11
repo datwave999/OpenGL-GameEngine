@@ -22,6 +22,7 @@ void PlayState::Initialize(Application* app) {
     // 1. Setup Input & Camera
     glfwSetInputMode(app->GetWindow()->getNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     camera = std::make_unique<Camera>();
+    camera->InitUBO();
 
     // 3. Grab AssetManager from Application
     AssetContainer& assets = app->GetAssets();
@@ -90,9 +91,9 @@ void PlayState::Update(Application* app, double dt) {
 }
 
 void PlayState::Render(Application* app) {
-    coreShader->enableShader();
+    camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
 
-    camera->setUniforms(coreShader.get(), app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
+    coreShader->enableShader();
 
     for (const auto& obj : objects) {
         obj->Render(coreShader.get());
