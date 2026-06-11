@@ -17,7 +17,6 @@ Texture::Texture(const std::string& path, const std::string& type) : path(path),
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true); // OpenGL expects 0.0 on Y axis to be bottom
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
 
 	if (data) {
@@ -28,6 +27,7 @@ Texture::Texture(const std::string& path, const std::string& type) : path(path),
 	}
 	else {
 		std::cerr << "Failed to load texture: " << path << std::endl;
+		glDeleteTextures(1, &textureID);
 		textureID = 0;
 	}
 

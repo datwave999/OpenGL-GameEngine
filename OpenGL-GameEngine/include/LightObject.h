@@ -10,6 +10,7 @@ class LightObject : public Object
 public:
 	LightObject(std::shared_ptr<Model> model, std::shared_ptr<PointLight> light);
 
+	void Update(float dt) override;
 	void Render(Shader* shader) override;
 
 private:

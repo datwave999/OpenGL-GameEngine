@@ -10,42 +10,41 @@ void LightManager::setDirectionalLight(glm::vec3 direction, glm::vec3 color, flo
     mainLight = std::make_unique<DirectionalLight>(direction, color, diffuseIntensity, ambientIntensity);
 }
 
-std::shared_ptr<PointLight> LightManager::getPointLight(std::string key, glm::vec3 position, glm::vec3 color, float radius, float diffuseIntensity, float ambientIntensity, float specularIntensity)
+std::shared_ptr<PointLight> LightManager::getPointLight(glm::vec3 position, glm::vec3 color, float radius, float diffuseIntensity, float ambientIntensity, float specularIntensity)
 {
-    auto it = pointLights.find(key);
-    if (it != pointLights.end()) {
-        if (std::shared_ptr<PointLight> light = it->second.lock()) {
-            return light;
-        }
-    }
-
     std::shared_ptr<PointLight> newLight = std::make_shared<PointLight>(position, color, radius, diffuseIntensity, ambientIntensity, specularIntensity);
-    pointLights[key] = newLight;
-
+    pointLights.push_back(newLight);
     return newLight;
 }
 
-void LightManager::Update() {
+void LightManager::UpdateData() {
     if (!lightUBO) return;
 
     // 1. Pack the Directional Light
-    uboData.directionalLight = mainLight->getLightData();
+    if (mainLight) {
+        uboData.directionalLight = mainLight->getLightData();
+    }
+    else {
+        uboData.directionalLight = DirectionalLightData{};
+    }
 
     // 2. Pack the Point Lights (With a safety limit of MAX_POINT_LIGHTS
     auto it = pointLights.begin();
     int active = 0;
 
-    while (it != pointLights.end()) {
-        if (auto light = it->second.lock()) {
+    for (int i = 0; i < pointLights.size(); ) {
+        if (auto light = pointLights[i].lock()) {
             if (active < MAX_POINT_LIGHTS) {
                 uboData.pointLights[active] = light->getLightData();
                 active++;
             }
+            i++;
         }
         else {
-            it = pointLights.erase(it);
+            // Swap and Pop for O(1) deletion
+            pointLights[i] = pointLights.back();
+            pointLights.pop_back();
         }
-        ++it;
     }
 
     uboData.numPointLights = active;

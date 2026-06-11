@@ -73,7 +73,6 @@ void PlayState::Initialize(Application* app) {
     objects.push_back(std::make_unique<Object>(race));
     objects.push_back(std::make_unique<Object>(floorModel));
 
-    // 9. Initial Object Setup
     objects[1]->transform.SetPosition(glm::vec3(0.0f, 2.0f, 0.0f));
     objects[2]->transform.SetPosition(glm::vec3(0.0f, -1.0f, 3.0f));
     objects[3]->transform.SetPosition(glm::vec3(2.0f, 0.0f, 0.0f));
@@ -86,9 +85,9 @@ void PlayState::Initialize(Application* app) {
  
     lights.setDirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.8f, 0.8f, 0.8f), 1.0f); // Whiteish sun
 
-    auto blueLight = lights.getPointLight("blue", glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); // Blue
-    auto redLight = lights.getPointLight("red", glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Red
-    auto greenLight = lights.getPointLight("green", glm::vec3(-2.0f, 1.0f, -2.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Green
+    auto blueLight = lights.getPointLight(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); // Blue
+    auto redLight = lights.getPointLight(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Red
+    auto greenLight = lights.getPointLight(glm::vec3(-2.0f, 1.0f, -2.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Green
 
     lightObjects.push_back(std::make_unique<LightObject>(blueSphere, blueLight));
     lightObjects.push_back(std::make_unique<LightObject>(redSphere, redLight));
@@ -99,7 +98,7 @@ void PlayState::Initialize(Application* app) {
     lightObjects[2]->transform.SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
 }
 
-void PlayState::Update(Application* app, double dt) {
+void PlayState::Update(Application* app, float dt) {
     // --- PAUSE LOGIC ---
     if (Input::keyWentDown(GLFW_KEY_ESCAPE)) {
         app->PushState(std::make_unique<PauseState>());
@@ -107,17 +106,25 @@ void PlayState::Update(Application* app, double dt) {
     }
 
     // --- GAME LOGIC ---
-    objects[1]->transform.Rotate(40 * (float)dt, glm::vec3(0.0f, 0.0f, 1.0f));
-    objects[2]->transform.Rotate(50 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
+    objects[1]->transform.Rotate(40 * dt, glm::vec3(0.0f, 0.0f, 1.0f));
+    objects[2]->transform.Rotate(50 * dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
-    objects[4]->transform.MoveRelative(glm::vec3(0.0f, 0.0f, 2.0f) * float(dt));
-    objects[4]->transform.Rotate(30 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
+    objects[4]->transform.MoveRelative(glm::vec3(0.0f, 0.0f, 2.0f) * dt);
+    objects[4]->transform.Rotate(30 * dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
-    lightObjects[0]->transform.MoveRelative(glm::vec3(0.0f, 0.0f, 2.0f) * float(dt));
-    lightObjects[0]->transform.Rotate(30 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
+    lightObjects[0]->transform.MoveRelative(glm::vec3(0.0f, 0.0f, 2.0f) * dt);
+    lightObjects[0]->transform.Rotate(30 * dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
     // --- UPDATE LIGHTING ---
-    lights.Update();
+    for (const auto& obj : objects) {
+        obj->Update(dt);
+    }
+
+    for (const auto& lightObj : lightObjects) {
+        lightObj->Update(dt);
+    }
+
+    lights.UpdateData();
 
     // --- UPDATE CAMERA ---
     camera->Update(dt);
@@ -125,25 +132,24 @@ void PlayState::Update(Application* app, double dt) {
 }
 
 void PlayState::Render(Application* app) {
+    // Core shader for Objects
     coreShader->enableShader();
 
-    camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
+        camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
+        coreShader->setUniform(Uniform::cameraPos, camera->getPosition());
 
-    // send cameraPos to frag shader
-    coreShader->setUniform(Uniform::cameraPos, camera->getPosition());
+        for (const auto& obj : objects) {
+            obj->Render(coreShader.get());
+        }
 
-    for (const auto& obj : objects) {
-        obj->Render(coreShader.get());
-    }
+        coreShader->disableShader();
 
-    coreShader->disableShader();
-
-    //Light Objects
+    // Unlit shader for Light Objects
     unlitShader->enableShader();
 
-    for (const auto& lights : lightObjects) {
-        lights->Render(unlitShader.get());
-    }
+        for (const auto& lightObj : lightObjects) {
+            lightObj->Render(unlitShader.get());
+        }
 
     unlitShader->disableShader();
 }

@@ -24,9 +24,9 @@ void Camera::InitUBO() {
     cameraUBO->bindBase(0);
 }
 
-void Camera::Update(double dt) {
+void Camera::Update(float dt) {
     // --- 1. KEYBOARD MOVEMENT ---
-    float velocity = MovementSpeed * static_cast<float>(dt);
+    float velocity = MovementSpeed * dt;
 
     // TEMP WAY TO SPEED UP
     if (Input::keyWentDown(GLFW_KEY_LEFT_SHIFT)) MovementSpeed *= 3.0f;

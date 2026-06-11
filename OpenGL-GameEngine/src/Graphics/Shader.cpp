@@ -9,6 +9,10 @@ static const char* UniformNames[] = {
 	"cameraPos"
 };
 
+// Debugging 
+static_assert(std::size(UniformNames) == static_cast<size_t>(Uniform::NUM_UNIFORMS),
+	"FATAL ERROR: UniformNames string array does not match the size of the Uniform enum!");
+
 Shader::Shader(const char* vertexShaderLocation, const char* fragmentShaderLocation, const char* geometryShaderLocation)
 {
 	GLuint vertexShader = compileShader(vertexShaderLocation, GL_VERTEX_SHADER);

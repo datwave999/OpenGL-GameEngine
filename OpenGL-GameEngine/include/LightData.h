@@ -38,5 +38,5 @@ struct LightUBO {
     DirectionalLightData directionalLight;
     PointLightData pointLights[MAX_POINT_LIGHTS];
     int numPointLights;
-    float padding[3];
+    float pad1, pad2, pad3;
 };

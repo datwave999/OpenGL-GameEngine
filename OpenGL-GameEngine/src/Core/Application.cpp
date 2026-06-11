@@ -1,9 +1,12 @@
 #include "Application.h"
+
 #include <iostream>
+#include <STB/stb_image.h>  
 
 #include "Window.h"
 #include "Input.h" 
 #include "PlayState.h" // To push initial state
+
 
 Application::Application() : lastFrameTime(0.0), frameCount(0), fpsTimer(0.0) {
 }
@@ -25,6 +28,7 @@ bool Application::Initialize() {
     // 2. Global Engine Settings
     glEnable(GL_DEPTH_TEST);
     glfwSwapInterval(0); // VSync (0 = Off, 1 = On)
+    stbi_set_flip_vertically_on_load(true); // OpenGL expects 0.0 on Y axis to be bottom
 
     // 3. Pass Callbacks to GLFW
     glfwSetKeyCallback(window->getNativeWindow(), Input::keyCallback);
@@ -54,7 +58,7 @@ void Application::PopState() {
 }
 
 // --- Internal Engine Logic ---
-void Application::Update(double dt) {
+void Application::Update(float dt) {
     // OS-level things 
     window->processInput();
 
@@ -89,8 +93,8 @@ void Application::Run() {
 
         // 1. Calculate Delta Time 
         double currentFrameTime = glfwGetTime();
-        double dt = currentFrameTime - lastFrameTime;
-        if (dt > 0.1) dt = 0.1; // Cap at 100ms
+        float dt = static_cast<float>(currentFrameTime - lastFrameTime);
+        if (dt > 0.1) dt = 0.1f; // Cap at 100ms
         lastFrameTime = currentFrameTime;
 
         // 2. FPS count

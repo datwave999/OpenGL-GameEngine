@@ -25,6 +25,8 @@ public:
     const glm::vec3& GetScale() const { return scale; }
     const glm::quat& GetRotation() const { return rotation; }
 
+    const bool hasTransformed() const { return isTransformed; }
+
     // Directional Helpers
     glm::vec3 GetForward() const;
     glm::vec3 GetRight() const;
@@ -40,6 +42,7 @@ private:
 
     glm::mat4 ModelMatrix;
     glm::mat3 NormalMatrix;
+
     bool isTransformed;
 
     glm::vec3 position;

@@ -15,7 +15,7 @@ uniform vec3 cameraPos;
 layout(std140, binding = 2) uniform MaterialData {
     float matShininess;
     float matSpecularIntens;
-    vec2 padding;
+    float matPad1, matPad2;
 };
 
 // --- LIGHTING STRUCTURES ---
@@ -48,7 +48,7 @@ layout(std140, binding = 1) uniform LightData {
     DirectionalLight directionalLight;
     PointLight pointLights[MAX_POINT_LIGHTS];
     int numPointLights;
-    vec3 paddingEnd; 
+    float pad1, pad2, pad3;
 };
 
 // --- FUNCTION PROTOTYPES ---
@@ -61,7 +61,8 @@ void main() {
     vec3 viewDir = normalize(cameraPos - FragPos);
     
     // 2. Sample the texture
-    vec3 albedo = texture(texture1, TexCoords).rgb;
+    vec4 texColour = texture(texture1, TexCoords);
+    vec3 albedo = texColour.rgb;
 
     // 3. Directional Light calculation
     vec3 result = CalcDirectionalLight(directionalLight, norm, viewDir, albedo);
@@ -72,7 +73,7 @@ void main() {
     }
 
     // 5. Final Output
-    FragColour = vec4(result, 1.0);
+    FragColour = vec4(result, texColour.a);
 }
 
 // --------------------------------------------------------
@@ -98,7 +99,9 @@ vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir, vec
 }
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 albedo) {
-    vec3 lightDir = normalize(light.position - fragPos);
+    vec3 lightVector = light.position - fragPos;
+    float distance = length(lightVector);
+    vec3 lightDir = lightVector / distance;
     
     // Diffuse calculation
     float diff = max(dot(normal, lightDir), 0.0);
@@ -108,7 +111,6 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
     float spec = pow(max(dot(normal, halfwayDir), 0.0), max(matShininess, 0.0001)); 
 
     // Attenuation (Distance Fading)
-    float distance = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     // Combine

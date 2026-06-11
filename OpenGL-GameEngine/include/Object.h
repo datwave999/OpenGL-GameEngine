@@ -12,6 +12,7 @@ public:
 
 	Object(const std::shared_ptr<Model>& assignedModel);
 
+	virtual void Update(float dt);
 	virtual void Render(Shader* shader);
 
 protected:

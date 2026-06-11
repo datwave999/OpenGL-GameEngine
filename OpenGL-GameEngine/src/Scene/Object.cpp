@@ -3,6 +3,10 @@
 
 Object::Object(const std::shared_ptr<Model>& assignedModel) : model(assignedModel) {}
 
+void Object::Update(float dt)
+{
+}
+
 void Object::Render(Shader* shader) {
 	if (!model) return;
 

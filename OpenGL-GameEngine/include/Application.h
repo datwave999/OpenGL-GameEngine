@@ -28,12 +28,12 @@ public:
 
 private:
     // --- Internal Loop ---
-    void Update(double dt);
+    void Update(float dt);
     void Render();
 
     // --- Time & FPS ---
     int frameCount;
-    double fpsTimer;
+    float fpsTimer;
     double lastFrameTime;
 
     // --- Core Systems ---

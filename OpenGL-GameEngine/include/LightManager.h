@@ -16,18 +16,17 @@ public:
                         float diffuseIntensity = 1.0f,
                         float ambientIntensity = 0.1f);
 
-    std::shared_ptr<PointLight> getPointLight(std::string key, 
-                                            glm::vec3 position, glm::vec3 color, float radius = 50.0f,
+    std::shared_ptr<PointLight> getPointLight(glm::vec3 position, glm::vec3 color, float radius = 50.0f,
                                             float diffuseIntensity = 1.0f,
                                             float ambientIntensity = 0.05f,
                                             float specularIntensity = 1.0f);
 
-    void Update();
+    void UpdateData();
 
 private:
     // Lights
     std::unique_ptr<DirectionalLight> mainLight;
-    std::unordered_map<std::string, std::weak_ptr<PointLight>> pointLights;
+    std::vector<std::weak_ptr<PointLight>> pointLights;
 
     // Light UBO data
     std::unique_ptr<Buffer> lightUBO;

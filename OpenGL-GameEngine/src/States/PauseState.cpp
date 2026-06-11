@@ -32,7 +32,7 @@ void PauseState::Initialize(Application* app) {
     overlayMesh = assets.getMesh("overlayMesh", StandardMeshes::CreateOverlay());
 }
 
-void PauseState::Update(Application* app, double dt) {
+void PauseState::Update(Application* app, float dt) {
     // Unpause logic
     if (Input::keyWentDown(GLFW_KEY_ESCAPE)) {
         glfwSetInputMode(app->GetWindow()->getNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
