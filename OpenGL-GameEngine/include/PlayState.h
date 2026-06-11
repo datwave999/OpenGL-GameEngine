@@ -4,9 +4,15 @@
 #include <vector>
 #include <memory>
 
+#include "DirectionalLight.h"
+#include "PointLight.h"
+#include "LightManager.h"
+
 class Camera;
 class Object;
 class Shader;
+class LightObject;
+
 
 class PlayState : public State {
 public:
@@ -24,6 +30,12 @@ private:
     std::unique_ptr<Camera> camera;
     std::vector<std::unique_ptr<Object>> objects;
     std::shared_ptr<Shader> coreShader;
+
+    // --- Lighting ---
+    LightManager lights;
+
+    std::vector<std::unique_ptr<LightObject>> lightObjects;
+    std::shared_ptr<Shader> unlitShader;
 
     // --- Preloads ---
     std::shared_ptr<Shader> overlayShaderPreload;

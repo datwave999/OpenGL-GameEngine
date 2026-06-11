@@ -44,12 +44,12 @@ std::shared_ptr<Mesh> StandardMeshes::CreateCube(float uvScale) {
     };
 
     std::vector<GLuint> indices = {
-        0, 1, 2,  2, 3, 0,       // Front
-        4, 5, 6,  6, 7, 4,       // Back
-        8, 9, 10, 10, 11, 8,     // Left
-        12, 13, 14, 14, 15, 12,  // Right
-        16, 17, 18, 18, 19, 16,  // Top
-        20, 21, 22, 22, 23, 20   // Bottom
+            0, 1, 2,  2, 3, 0,       // Front
+            5, 4, 7,  7, 6, 5,       // Back 
+            8, 9, 10, 10, 11, 8,     // Left
+            12, 13, 14, 14, 15, 12,  // Right
+            16, 17, 18, 18, 19, 16,  // Top
+            20, 21, 22, 22, 23, 20   // Bottom
     };
 
     GeometryUtils::CalculateFlatNormals(vertices, indices);
@@ -94,14 +94,14 @@ std::shared_ptr<Mesh> StandardMeshes::CreateSphere(int sectors, int stacks) {
         for (int j = 0; j < sectors; ++j, ++k1, ++k2) {
             if (i != 0) {
                 indices.push_back(k1);
-                indices.push_back(k2);
                 indices.push_back(k1 + 1);
+                indices.push_back(k2);
             }
 
             if (i != (stacks - 1)) {
                 indices.push_back(k1 + 1);
-                indices.push_back(k2);
                 indices.push_back(k2 + 1);
+                indices.push_back(k2);
             }
         }
     }
@@ -154,12 +154,12 @@ std::shared_ptr<Mesh> StandardMeshes::CreatePlane(float uvScale) {
     };
 
     std::vector<GLuint> indices = {
-        0, 1, 2,  2, 3, 0,       // Front
-        4, 5, 6,  6, 7, 4,       // Back
-        8, 9, 10, 10, 11, 8,     // Left
-        12, 13, 14, 14, 15, 12,  // Right
-        16, 17, 18, 18, 19, 16,  // Top
-        20, 21, 22, 22, 23, 20   // Bottom
+            0, 1, 2,  2, 3, 0,       // Front
+            5, 4, 7,  7, 6, 5,       // Back 
+            8, 9, 10, 10, 11, 8,     // Left
+            12, 13, 14, 14, 15, 12,  // Right
+            16, 17, 18, 18, 19, 16,  // Top
+            20, 21, 22, 22, 23, 20   // Bottom
     };
 
     GeometryUtils::CalculateFlatNormals(vertices, indices);

@@ -5,7 +5,8 @@ enum class Uniform {
 	model,        
 	view,         
 	projection,   
-	normalMatrix, 
+	normalMatrix,
+	cameraPos,
 
 	NUM_UNIFORMS  
 };

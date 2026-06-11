@@ -15,11 +15,13 @@ Camera::Camera(glm::vec3 position) {
     FOV = 60.0f;
 
     updateCameraVectors();
+
+    InitUBO();
 }
 
 void Camera::InitUBO() {
     cameraUBO = std::make_unique<Buffer>(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, cameraUBO->getBufferID());
+    cameraUBO->bindBase(0);
 }
 
 void Camera::Update(double dt) {

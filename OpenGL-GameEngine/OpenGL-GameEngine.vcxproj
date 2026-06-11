@@ -148,6 +148,10 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Light\LightObject.cpp" />
+    <ClCompile Include="src\Light\LightManager.cpp" />
+    <ClCompile Include="src\Light\PointLight.cpp" />
+    <ClCompile Include="src\Light\DirectionalLight.cpp" />
     <ClCompile Include="src\States\PauseState.cpp" />
     <ClCompile Include="src\States\PlayState.cpp" />
     <ClCompile Include="src\Graphics\Model.cpp" />
@@ -170,11 +174,13 @@
     <ClCompile Include="src\Resources\StandardMeshes.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\DirectionalLight.h" />
     <ClInclude Include="include\AssetContainer.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\Buffer.h" />
     <ClInclude Include="include\GeometryUtils.hpp" />
+    <ClInclude Include="include\LightData.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\State.h" />
     <ClInclude Include="include\Uniform.h" />
@@ -186,6 +192,9 @@
     <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\PlayState.h" />
     <ClInclude Include="include\PauseState.h" />
+    <ClInclude Include="include\PointLight.h" />
+    <ClInclude Include="include\LightManager.h" />
+    <ClInclude Include="include\LightObject.h" />
     <ClInclude Include="src\Headers\Shader.h" />
     <ClInclude Include="include\VertexArray.h" />
     <ClInclude Include="include\Texture.h" />
@@ -197,6 +206,8 @@
     <None Include="assets\Shaders\core.vert" />
     <None Include="assets\Shaders\overlay.frag" />
     <None Include="assets\Shaders\overlay.vert" />
+    <None Include="assets\Shaders\unlit.frag" />
+    <None Include="assets\Shaders\unlit.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

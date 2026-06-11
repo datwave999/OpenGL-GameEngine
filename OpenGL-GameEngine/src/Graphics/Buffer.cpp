@@ -6,6 +6,10 @@ Buffer::Buffer(GLenum type, GLsizeiptr size, const void* data, GLenum drawType) 
 	glBindBuffer(bufferType, bufferID);
 	glBufferData(bufferType, size, data, drawType);
 }
+
+void Buffer::bindBase(GLuint index) const{
+	glBindBufferBase(bufferType, index, bufferID);
+}
  
 void Buffer::bind() const {
 	glBindBuffer(bufferType, bufferID);

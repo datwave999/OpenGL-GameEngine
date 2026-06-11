@@ -5,7 +5,8 @@ static const char* UniformNames[] = {
 	"model",
 	"view",
 	"projection",
-	"normalMatrix"
+	"normalMatrix",
+	"cameraPos"
 };
 
 Shader::Shader(const char* vertexShaderLocation, const char* fragmentShaderLocation, const char* geometryShaderLocation)

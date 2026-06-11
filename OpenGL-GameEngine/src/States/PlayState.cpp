@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "StandardMeshes.h"
 #include "Material.h"
+#include "LightObject.h"
 #include <iostream>
 
 PlayState::PlayState()
@@ -22,14 +23,14 @@ void PlayState::Initialize(Application* app) {
     // 1. Setup Input & Camera
     glfwSetInputMode(app->GetWindow()->getNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     camera = std::make_unique<Camera>();
-    camera->InitUBO();
 
-    // 3. Grab AssetManager from Application
+    // 2. Grab AssetManager from Application
     AssetContainer& assets = app->GetAssets();
 
-    // 2. Compile Shaders 
+    // 3. Compile Shaders 
     coreShader = assets.getShader("coreShader", "assets/Shaders/core.vert", "assets/Shaders/core.frag");
     overlayShaderPreload = assets.getShader("overlayShader", "assets/Shaders/overlay.vert", "assets/Shaders/overlay.frag");
+    unlitShader = assets.getShader("unlitShader", "assets/Shaders/unlit.vert", "assets/Shaders/unlit.frag");
 
     // 4. Register Meshes
     auto cubeMesh = assets.getMesh("cube", StandardMeshes::CreateCube(2.0f));
@@ -40,11 +41,17 @@ void PlayState::Initialize(Application* app) {
     auto obamaTex = assets.getTexture("obama", "assets/Textures/obama_sandwich.jpg");
     auto flagTex = assets.getTexture("flag", "assets/Textures/community.png");
     auto greyPrototypeTex = assets.getTexture("prototypeGrey", "assets/Textures/PNG/Light/texture_08.png");
+    auto blueTex = assets.getTexture("blue", glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+    auto redTex = assets.getTexture("red", glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    auto greenTex = assets.getTexture("green", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
     // 6. Get Materials
-    auto obamaMat = assets.getMaterial("obamaSandwich", obamaTex, 0);
-    auto flagMat = assets.getMaterial("communityFlag", flagTex, 0);
-    auto greyMat = assets.getMaterial("greyFloor", greyPrototypeTex, 0);
+    auto obamaMat = assets.getMaterial("obamaSandwich", obamaTex, 0, 64.0f, 1.0f);
+    auto flagMat = assets.getMaterial("communityFlag", flagTex, 0, 16.0f, 0.6f);
+    auto greyMat = assets.getMaterial("greyFloor", greyPrototypeTex, 0, 16.0f, 0.2f);
+    auto blueMat = assets.getMaterial("blueMat", blueTex, 0);
+    auto redMat = assets.getMaterial("redMat", redTex, 0);
+    auto greenMat = assets.getMaterial("greenMat", greenTex, 0);
 
     // 7. Get Models
     auto obamaCubeModel = assets.getModel("obamaCube", cubeMesh, obamaMat);
@@ -53,6 +60,10 @@ void PlayState::Initialize(Application* app) {
     auto floorModel = assets.getModel("floor", planeMesh, greyMat);
     auto sedan = assets.getModel("sedan", "assets/Models/sedan/sedan.obj");
     auto race = assets.getModel("race", "assets/Models/race/race.obj");
+
+    auto blueSphere = assets.getModel("blueLight", sphereMesh, blueMat);
+    auto redSphere = assets.getModel("redLight", sphereMesh, redMat);
+    auto greenSphere = assets.getModel("greenLight", sphereMesh, greenMat);
 
     // 8. Create Objects 
     objects.push_back(std::make_unique<Object>(obamaCubeModel));
@@ -69,6 +80,23 @@ void PlayState::Initialize(Application* app) {
     objects[4]->transform.SetPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
     objects[5]->transform.SetPosition(glm::vec3(0.0f, -1.0f, 0.0f));
     objects[5]->transform.SetScale(glm::vec3(100.0f, 0.1f, 100.0f));
+
+    // 10. Add Lighting to the Scene
+    lights.Initialize();
+ 
+    lights.setDirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.8f, 0.8f, 0.8f), 1.0f); // Whiteish sun
+
+    auto blueLight = lights.getPointLight("blue", glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); // Blue
+    auto redLight = lights.getPointLight("red", glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Red
+    auto greenLight = lights.getPointLight("green", glm::vec3(-2.0f, 1.0f, -2.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Green
+
+    lightObjects.push_back(std::make_unique<LightObject>(blueSphere, blueLight));
+    lightObjects.push_back(std::make_unique<LightObject>(redSphere, redLight));
+    lightObjects.push_back(std::make_unique<LightObject>(greenSphere, greenLight));
+
+    lightObjects[0]->transform.SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
+    lightObjects[1]->transform.SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
+    lightObjects[2]->transform.SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
 }
 
 void PlayState::Update(Application* app, double dt) {
@@ -85,20 +113,37 @@ void PlayState::Update(Application* app, double dt) {
     objects[4]->transform.MoveRelative(glm::vec3(0.0f, 0.0f, 2.0f) * float(dt));
     objects[4]->transform.Rotate(30 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
+    lightObjects[0]->transform.MoveRelative(glm::vec3(0.0f, 0.0f, 2.0f) * float(dt));
+    lightObjects[0]->transform.Rotate(30 * (float)dt, glm::vec3(0.0f, 1.0f, 0.0f));
+
+    // --- UPDATE LIGHTING ---
+    lights.Update();
+
     // --- UPDATE CAMERA ---
     camera->Update(dt);
     camera->processMouseScroll(Input::getScrollDY());
 }
 
 void PlayState::Render(Application* app) {
+    coreShader->enableShader();
+
     camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
 
-    coreShader->enableShader();
+    // send cameraPos to frag shader
+    coreShader->setUniform(Uniform::cameraPos, camera->getPosition());
 
     for (const auto& obj : objects) {
         obj->Render(coreShader.get());
     }
 
-
     coreShader->disableShader();
+
+    //Light Objects
+    unlitShader->enableShader();
+
+    for (const auto& lights : lightObjects) {
+        lights->Render(unlitShader.get());
+    }
+
+    unlitShader->disableShader();
 }

@@ -56,14 +56,14 @@ std::shared_ptr<Texture> AssetContainer::getTexture(const std::string& key, glm:
     return newTex;
 }
 
-std::shared_ptr<Material> AssetContainer::getMaterial(const std::string& key, const std::shared_ptr<Texture>& texture, int texUnit) {
+std::shared_ptr<Material> AssetContainer::getMaterial(const std::string& key, const std::shared_ptr<Texture>& texture, int texUnit, float shininess, float specularIntensity) {
     auto it = materials.find(key);
     if (it != materials.end()) {
         if (std::shared_ptr<Material> sharedMat = it->second.lock()) {
             return sharedMat;
         }
     }
-    std::shared_ptr<Material> newMat = std::make_shared<Material>(texture, texUnit);
+    std::shared_ptr<Material> newMat = std::make_shared<Material>(texture, texUnit, shininess, specularIntensity);
     materials[key] = newMat;
     return newMat;
 }

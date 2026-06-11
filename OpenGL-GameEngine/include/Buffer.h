@@ -17,6 +17,7 @@ public:
 	void unbind() const;
 
 	// Update existing buffer data (for UBOs)
+	void bindBase(GLuint index) const;
 	void updateData(GLintptr offset, GLsizeiptr size, const void* data) const;
 
 	// Getters

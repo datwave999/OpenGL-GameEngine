@@ -12,8 +12,8 @@ public:
 
 	Object(const std::shared_ptr<Model>& assignedModel);
 
-	void Render(Shader* shader);
+	virtual void Render(Shader* shader);
 
-private:
+protected:
 	std::shared_ptr<Model> model;
 };

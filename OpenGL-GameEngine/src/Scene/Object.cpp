@@ -9,5 +9,5 @@ void Object::Render(Shader* shader) {
 	shader->setUniform(Uniform::model, transform.getModelMatrix());
 	shader->setUniform(Uniform::normalMatrix, transform.getNormalMatrix());
 
-	model->Render(shader);
+	model->Render(shader);	
 }

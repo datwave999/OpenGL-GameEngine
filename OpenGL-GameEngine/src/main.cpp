@@ -15,3 +15,6 @@ int main() {
 
     return 0; 
 }
+
+
+// use SSBO to upload material data to the gpu
