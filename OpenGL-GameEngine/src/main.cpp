@@ -16,5 +16,5 @@ int main() {
     return 0; 
 }
 
-// Minor bug fixes
+// upgrade unlit.frag into a lightobject.frag shader to add more realistic light objects
 // use SSBO to upload material data to the gpu

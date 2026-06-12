@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <algorithm>
 
 class LightManager {
 public:
@@ -27,7 +28,7 @@ public:
                                         float radius = 50.0f, float diffuseIntensity = 1.0f,
                                         float ambientIntensity = 0.05f, float specularIntensity = 1.0f);
 
-    void UpdateData();
+    void UpdateData(glm::vec3 cameraPos);
 
 private:
     // Lights
@@ -38,4 +39,8 @@ private:
     // Light UBO data
     std::unique_ptr<Buffer> lightUBO;
     LightUBO uboData;
+
+    // Light distance-culling storage
+    std::vector<std::shared_ptr<PointLight>> alivePointLights;
+    std::vector<std::shared_ptr<SpotLight>> aliveSpotLights;
 };

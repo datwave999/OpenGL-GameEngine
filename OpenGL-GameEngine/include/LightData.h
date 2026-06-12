@@ -50,8 +50,8 @@ struct SpotLightData {
 };
 
 // 4. The Master UBO Block
-#define MAX_POINT_LIGHTS 10
-#define MAX_SPOT_LIGHTS 5
+#define MAX_POINT_LIGHTS 16
+#define MAX_SPOT_LIGHTS 8
 
 struct LightUBO {
     DirectionalLightData directionalLight;

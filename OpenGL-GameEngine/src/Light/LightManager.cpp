@@ -24,10 +24,10 @@ std::shared_ptr<SpotLight> LightManager::getSpotLight(glm::vec3 position, glm::v
     return newLight;
 }
 
-void LightManager::UpdateData() {
+void LightManager::UpdateData(glm::vec3 cameraPos) {
     if (!lightUBO) return;
 
-    // 1. Pack the Directional Light
+    // Pack the Directional Light
     if (mainLight) {
         uboData.directionalLight = mainLight->getLightData();
     }
@@ -35,46 +35,84 @@ void LightManager::UpdateData() {
         uboData.directionalLight = DirectionalLightData{};
     }
 
-    // 2. Pack the Point Lights (With a safety limit of MAX_POINT_LIGHTS)
-    int active = 0;
-
-    for (int i = 0; i < pointLights.size(); ) {
+    // --- POINT LIGHTS ---
+    
+    // A. Gather living lights and pop the dead ones
+    alivePointLights.clear();
+    
+    for (int i = 0; i < pointLights.size();) {
         if (auto light = pointLights[i].lock()) {
-            if (active < MAX_POINT_LIGHTS) {
-                uboData.pointLights[active] = light->getLightData();
-                active++;
-            }
+            alivePointLights.push_back(light);
             i++;
         }
         else {
-            // Swap and Pop for O(1) deletion
+            // Swap and Pop
             pointLights[i] = pointLights.back();
             pointLights.pop_back();
         }
     }
 
-    uboData.numPointLights = active;
+    // B. partially sort to get the lowest distance ones that are in our limit of MAX_POINT_LIGHTS
+    int pointLightCount = std::min((int)alivePointLights.size(), MAX_POINT_LIGHTS);
 
-    // 2. Pack the Spot Lights (With a safety limit of MAX_SPOT_LIGHTS)
-    active = 0;
+    if (pointLightCount > 0) {
+        std::partial_sort(alivePointLights.begin(),
+            alivePointLights.begin() + pointLightCount,
+            alivePointLights.end(),
+            [&cameraPos](const std::shared_ptr<PointLight>& a, const std::shared_ptr<PointLight>& b) {
+                glm::vec3 diffA = a->getPosition() - cameraPos;
+                glm::vec3 diffB = b->getPosition() - cameraPos;
+                return glm::dot(diffA, diffA) < glm::dot(diffB, diffB);
+            });
+    }
 
-    for (int i = 0; i < spotLights.size(); ) {
+    // C. pack the data for only the non-culled lights
+    for (int i = 0; i < pointLightCount; ++i) {
+        uboData.pointLights[i] = alivePointLights[i]->getLightData();
+    }
+    uboData.numPointLights = pointLightCount;
+
+
+
+    // --- SPOT LIGHTS ---
+
+    // A. Gather living lights and pop the dead ones
+    aliveSpotLights.clear();
+
+    for (int i = 0; i < spotLights.size();) {
         if (auto light = spotLights[i].lock()) {
-            if (active < MAX_SPOT_LIGHTS) {
-                uboData.spotLights[active] = light->getLightData();
-                active++;
-            }
+            aliveSpotLights.push_back(light);
             i++;
         }
         else {
-            // Swap and Pop for O(1) deletion
+            // Swap and Pop
             spotLights[i] = spotLights.back();
             spotLights.pop_back();
         }
     }
 
-    uboData.numSpotLights = active;
+    // B. partially sort to get the lowest distance ones that are in our limit of MAX_SPOT_LIGHTS
+    int spotLightCount = std::min((int)aliveSpotLights.size(), MAX_SPOT_LIGHTS);
 
-    // 3. Send it to the GPU
+    if (spotLightCount > 0) {
+        std::partial_sort(aliveSpotLights.begin(),
+            aliveSpotLights.begin() + spotLightCount,
+            aliveSpotLights.end(),
+            [&cameraPos](const std::shared_ptr<SpotLight>& a, const std::shared_ptr<SpotLight>& b) {
+                glm::vec3 diffA = a->getPosition() - cameraPos;
+                glm::vec3 diffB = b->getPosition() - cameraPos;
+                return glm::dot(diffA, diffA) < glm::dot(diffB, diffB);
+            });
+    }
+
+    // C. pack the data for only the non-culled lights
+    for (int i = 0; i < spotLightCount; ++i) {
+        uboData.spotLights[i] = aliveSpotLights[i]->getLightData();
+    }
+    uboData.numSpotLights = spotLightCount;
+
+
+
+    // --- UPLOAD DATA TO GPU ---
     lightUBO->updateData(0, sizeof(LightUBO), &uboData);
 }

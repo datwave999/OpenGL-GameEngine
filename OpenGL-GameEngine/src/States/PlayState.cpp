@@ -132,7 +132,7 @@ void PlayState::Update(Application* app, float dt) {
         lightObj->Update(dt);
     }
 
-    lights.UpdateData();
+    lights.UpdateData(camera->getPosition());
 
     // --- UPDATE CAMERA ---
     camera->Update(dt);

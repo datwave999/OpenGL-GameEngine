@@ -55,8 +55,8 @@ struct SpotLight {
 };
 
 // --- UBO: LIGHT DATA (Binding 1) ---
-#define MAX_POINT_LIGHTS 10
-#define MAX_SPOT_LIGHTS 5
+#define MAX_POINT_LIGHTS 16
+#define MAX_SPOT_LIGHTS 8
 
 layout(std140, binding = 1) uniform LightData {
     DirectionalLight directionalLight;
