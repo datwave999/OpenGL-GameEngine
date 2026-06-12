@@ -34,10 +34,10 @@ struct PointLightData {
 // 3. Spot Light Struct
 struct SpotLightData {
     glm::vec3 position;
-    float padding1;
+    float cutOff;
 
     glm::vec3 direction;
-    float padding2;
+    float outerCutOff;
 
     glm::vec3 ambient;
     float constant;
@@ -47,11 +47,6 @@ struct SpotLightData {
 
     glm::vec3 specular;
     float quadratic;
-
-    float cutOff;
-    float outerCutOff;
-    float padding3;
-    float padding4;
 };
 
 // 4. The Master UBO Block

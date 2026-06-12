@@ -16,4 +16,5 @@ int main() {
     return 0; 
 }
 
+// Minor bug fixes
 // use SSBO to upload material data to the gpu

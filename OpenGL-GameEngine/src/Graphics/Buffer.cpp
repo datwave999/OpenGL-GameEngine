@@ -21,12 +21,17 @@ void Buffer::unbind() const {
 
 void Buffer::updateData(GLintptr offset, GLsizeiptr size, const void* data) const
 {
-	glBindBuffer(bufferType, bufferID);
+    glBindBuffer(bufferType, bufferID);
 
-	// Orphaning method so that CPU isn't stalled
-	glBufferData(bufferType, size, nullptr, GL_DYNAMIC_DRAW);
+	// Get GPU memory to write data to (GL_MAP_INVALIDATE_BUFFER_BIT = Orphaning)
+    void* mappedMemory = glMapBufferRange(bufferType, offset, size,
+        GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 
-	glBufferSubData(bufferType, offset, size, data);
+    if (mappedMemory) {
+		// Copy the data over 
+        memcpy(mappedMemory, data, size);
+        glUnmapBuffer(bufferType);
+    }
 }
 
 Buffer::~Buffer() {

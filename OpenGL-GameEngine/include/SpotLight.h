@@ -11,7 +11,7 @@ public:
 
     void setPosition(glm::vec3 pos) override;
     glm::vec3 getPosition() const override { return data.position; }
-    void setDirection(glm::vec3 dir) override;
+    void setDirection(glm::vec3 direction) override;
     glm::vec3 getDirection() const override { return data.direction; }
 
     void setColor(glm::vec3 color);

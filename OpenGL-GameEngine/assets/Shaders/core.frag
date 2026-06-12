@@ -43,18 +43,15 @@ struct PointLight {
 
 struct SpotLight {
     vec3 position;
-    float padding1;
+    float cutOff;
     vec3 direction;
-    float padding2;
+    float outerCutOff;
     vec3 ambient;
     float constant;
     vec3 diffuse;
     float linear;
     vec3 specular;
     float quadratic;
-    float cutOff;
-    float outerCutOff;
-    float pad3, pad4;
 };
 
 // --- UBO: LIGHT DATA (Binding 1) ---
@@ -106,7 +103,7 @@ void main() {
 // --------------------------------------------------------
 
 vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir, vec3 albedo) {
-    vec3 lightDir = normalize(-light.direction);
+    vec3 lightDir = (-light.direction);
     
     // Diffuse calculation
     float diff = max(dot(normal, lightDir), 0.0);
@@ -162,7 +159,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     // Spotlight Cone Intensity (Soft Edges)
-    float theta = dot(lightDir, normalize(-light.direction)); 
+    float theta = dot(lightDir, (-light.direction)); 
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 

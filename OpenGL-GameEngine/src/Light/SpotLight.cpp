@@ -1,4 +1,5 @@
 #include "SpotLight.h"
+#include <iostream>
 
 SpotLight::SpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 color,
     float innerCutOffAngle, float outerCutOffAngle, float radius,
@@ -19,7 +20,12 @@ SpotLight::SpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 color,
 
 void SpotLight::setPosition(glm::vec3 pos) { data.position = pos; }
 
-void SpotLight::setDirection(glm::vec3 dir) { data.direction = glm::normalize(dir); }
+void SpotLight::setDirection(glm::vec3 direction) { 
+    if (length(direction) < 0.00001f) {
+        std::cerr << "[ENGINE ERROR] DirectionalLight direction is zero!\n";
+    }
+    data.direction = glm::normalize(direction); 
+}
 
 void SpotLight::setColor(glm::vec3 color) {
     baseColor = color;
