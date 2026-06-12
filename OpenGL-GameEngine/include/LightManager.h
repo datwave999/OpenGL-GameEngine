@@ -18,12 +18,12 @@ public:
                         float diffuseIntensity = 1.0f,
                         float ambientIntensity = 0.1f);
 
-    std::shared_ptr<PointLight> getPointLight(glm::vec3 position, glm::vec3 color, float radius = 50.0f,
+    std::shared_ptr<PointLight> addPointLight(glm::vec3 position, glm::vec3 color, float radius = 50.0f,
                                             float diffuseIntensity = 1.0f,
                                             float ambientIntensity = 0.05f,
                                             float specularIntensity = 1.0f);
 
-    std::shared_ptr<SpotLight> getSpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 color,
+    std::shared_ptr<SpotLight> addSpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 color,
                                         float innerCutOffAngle = 12.5f, float outerCutOffAngle = 17.5f,
                                         float radius = 50.0f, float diffuseIntensity = 1.0f,
                                         float ambientIntensity = 0.05f, float specularIntensity = 1.0f);

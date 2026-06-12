@@ -10,14 +10,14 @@ void LightManager::setDirectionalLight(glm::vec3 direction, glm::vec3 color, flo
     mainLight = std::make_unique<DirectionalLight>(direction, color, diffuseIntensity, ambientIntensity);
 }
 
-std::shared_ptr<PointLight> LightManager::getPointLight(glm::vec3 position, glm::vec3 color, float radius, float diffuseIntensity, float ambientIntensity, float specularIntensity)
+std::shared_ptr<PointLight> LightManager::addPointLight(glm::vec3 position, glm::vec3 color, float radius, float diffuseIntensity, float ambientIntensity, float specularIntensity)
 {
     std::shared_ptr<PointLight> newLight = std::make_shared<PointLight>(position, color, radius, diffuseIntensity, ambientIntensity, specularIntensity);
     pointLights.push_back(newLight);
     return newLight;
 }
 
-std::shared_ptr<SpotLight> LightManager::getSpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 color, float innerCutOffAngle, float outerCutOffAngle, float radius, float diffuseIntensity, float ambientIntensity, float specularIntensity)
+std::shared_ptr<SpotLight> LightManager::addSpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 color, float innerCutOffAngle, float outerCutOffAngle, float radius, float diffuseIntensity, float ambientIntensity, float specularIntensity)
 {
     std::shared_ptr<SpotLight> newLight = std::make_shared<SpotLight>(position, direction, color, innerCutOffAngle, outerCutOffAngle, radius, diffuseIntensity, ambientIntensity, specularIntensity);
     spotLights.push_back(newLight);

@@ -83,16 +83,17 @@ void PlayState::Initialize(Application* app) {
     objects[5]->transform.SetPosition(glm::vec3(0.0f, -1.0f, 0.0f));
     objects[5]->transform.SetScale(glm::vec3(100.0f, 0.1f, 100.0f));
 
+
     // 10. Add Lighting to the Scene
     lights.Initialize();
  
     lights.setDirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.8f, 0.8f, 0.8f), 0.1f); // Whiteish sun
 
-    auto blueLight = lights.getPointLight(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), 50.0f, 0.6f); // Blue
-    auto redLight = lights.getPointLight(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Red
-    auto greenLight = lights.getPointLight(glm::vec3(-2.0f, 1.0f, -2.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Green
+    auto blueLight = lights.addPointLight(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), 50.0f, 0.6f); // Blue
+    auto redLight = lights.addPointLight(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Red
+    auto greenLight = lights.addPointLight(glm::vec3(-2.0f, 1.0f, -2.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Green
 
-    auto yellowSpotLight = lights.getSpotLight(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), 15.0f, 20.0f, 100.0f);
+    auto yellowSpotLight = lights.addSpotLight(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), 15.0f, 20.0f, 100.0f);
 
     lightObjects.push_back(std::make_unique<LightObject>(blueSphere, blueLight));
     lightObjects.push_back(std::make_unique<LightObject>(redSphere, redLight));
