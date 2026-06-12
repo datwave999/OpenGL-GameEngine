@@ -48,7 +48,7 @@ void PlayState::Initialize(Application* app) {
     // 6. Get Materials
     auto obamaMat = assets.getMaterial("obamaSandwich", obamaTex, 0, 64.0f, 1.0f);
     auto flagMat = assets.getMaterial("communityFlag", flagTex, 0, 16.0f, 0.6f);
-    auto greyMat = assets.getMaterial("greyFloor", greyPrototypeTex, 0, 16.0f, 0.2f);
+    auto greyMat = assets.getMaterial("greyFloor", greyPrototypeTex, 0, 16.0f, 0.6f);
     auto blueMat = assets.getMaterial("blueMat", blueTex, 0);
     auto redMat = assets.getMaterial("redMat", redTex, 0);
     auto greenMat = assets.getMaterial("greenMat", greenTex, 0);
@@ -58,12 +58,15 @@ void PlayState::Initialize(Application* app) {
     auto flagCubeModel = assets.getModel("flagCube", cubeMesh, flagMat);
     auto sandwichSphereModel = assets.getModel("sandwichSphere", sphereMesh, obamaMat);
     auto floorModel = assets.getModel("floor", planeMesh, greyMat);
+
     auto sedan = assets.getModel("sedan", "assets/Models/sedan/sedan.obj");
     auto race = assets.getModel("race", "assets/Models/race/race.obj");
 
     auto blueSphere = assets.getModel("blueLight", sphereMesh, blueMat);
     auto redSphere = assets.getModel("redLight", sphereMesh, redMat);
     auto greenSphere = assets.getModel("greenLight", sphereMesh, greenMat);
+
+    auto flashLight = assets.getModel("flashlight", "assets/Models/flashlight/silencer-small.fbx");
 
     // 8. Create Objects 
     objects.push_back(std::make_unique<Object>(obamaCubeModel));
@@ -83,19 +86,23 @@ void PlayState::Initialize(Application* app) {
     // 10. Add Lighting to the Scene
     lights.Initialize();
  
-    lights.setDirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.8f, 0.8f, 0.8f), 1.0f); // Whiteish sun
+    lights.setDirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.8f, 0.8f, 0.8f), 0.1f); // Whiteish sun
 
-    auto blueLight = lights.getPointLight(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)); // Blue
+    auto blueLight = lights.getPointLight(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), 50.0f, 0.6f); // Blue
     auto redLight = lights.getPointLight(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Red
     auto greenLight = lights.getPointLight(glm::vec3(-2.0f, 1.0f, -2.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Green
+
+    auto yellowSpotLight = lights.getSpotLight(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), 15.0f, 20.0f, 100.0f);
 
     lightObjects.push_back(std::make_unique<LightObject>(blueSphere, blueLight));
     lightObjects.push_back(std::make_unique<LightObject>(redSphere, redLight));
     lightObjects.push_back(std::make_unique<LightObject>(greenSphere, greenLight));
+    lightObjects.push_back(std::make_unique<LightObject>(flashLight, yellowSpotLight));
 
-    lightObjects[0]->transform.SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
-    lightObjects[1]->transform.SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
-    lightObjects[2]->transform.SetScale(glm::vec3(0.2f, 0.2f, 0.2f));
+    lightObjects[0]->transform.SetScale(glm::vec3(0.2f));
+    lightObjects[1]->transform.SetScale(glm::vec3(0.2f));
+    lightObjects[2]->transform.SetScale(glm::vec3(0.2f));
+    lightObjects[3]->transform.SetScale(glm::vec3(0.05f));
 }
 
 void PlayState::Update(Application* app, float dt) {
@@ -114,6 +121,7 @@ void PlayState::Update(Application* app, float dt) {
 
     lightObjects[0]->transform.MoveRelative(glm::vec3(0.0f, 0.0f, 2.0f) * dt);
     lightObjects[0]->transform.Rotate(30 * dt, glm::vec3(0.0f, 1.0f, 0.0f));
+    lightObjects[3]->transform.Rotate(60 * dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
     // --- UPDATE LIGHTING ---
     for (const auto& obj : objects) {

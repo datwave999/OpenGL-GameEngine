@@ -16,5 +16,4 @@ int main() {
     return 0; 
 }
 
-// Implement spotLights
 // use SSBO to upload material data to the gpu

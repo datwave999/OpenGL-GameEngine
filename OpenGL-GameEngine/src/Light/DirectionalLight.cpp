@@ -6,7 +6,7 @@ DirectionalLight::DirectionalLight(glm::vec3 direction, glm::vec3 color, float d
     setDirection(direction);
     setColor(color);
 
-    data.specular = glm::vec3(1.0f);
+    data.specular = glm::vec3(diffuseIntensity); // specular intensity matches diffuse intensity
 }
 
 void DirectionalLight::setDirection(glm::vec3 direction) {

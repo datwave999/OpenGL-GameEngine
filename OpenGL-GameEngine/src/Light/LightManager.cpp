@@ -17,6 +17,13 @@ std::shared_ptr<PointLight> LightManager::getPointLight(glm::vec3 position, glm:
     return newLight;
 }
 
+std::shared_ptr<SpotLight> LightManager::getSpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 color, float innerCutOffAngle, float outerCutOffAngle, float radius, float diffuseIntensity, float ambientIntensity, float specularIntensity)
+{
+    std::shared_ptr<SpotLight> newLight = std::make_shared<SpotLight>(position, direction, color, innerCutOffAngle, outerCutOffAngle, radius, diffuseIntensity, ambientIntensity, specularIntensity);
+    spotLights.push_back(newLight);
+    return newLight;
+}
+
 void LightManager::UpdateData() {
     if (!lightUBO) return;
 
@@ -28,8 +35,7 @@ void LightManager::UpdateData() {
         uboData.directionalLight = DirectionalLightData{};
     }
 
-    // 2. Pack the Point Lights (With a safety limit of MAX_POINT_LIGHTS
-    auto it = pointLights.begin();
+    // 2. Pack the Point Lights (With a safety limit of MAX_POINT_LIGHTS)
     int active = 0;
 
     for (int i = 0; i < pointLights.size(); ) {
@@ -48,6 +54,26 @@ void LightManager::UpdateData() {
     }
 
     uboData.numPointLights = active;
+
+    // 2. Pack the Spot Lights (With a safety limit of MAX_SPOT_LIGHTS)
+    active = 0;
+
+    for (int i = 0; i < spotLights.size(); ) {
+        if (auto light = spotLights[i].lock()) {
+            if (active < MAX_SPOT_LIGHTS) {
+                uboData.spotLights[active] = light->getLightData();
+                active++;
+            }
+            i++;
+        }
+        else {
+            // Swap and Pop for O(1) deletion
+            spotLights[i] = spotLights.back();
+            spotLights.pop_back();
+        }
+    }
+
+    uboData.numSpotLights = active;
 
     // 3. Send it to the GPU
     lightUBO->updateData(0, sizeof(LightUBO), &uboData);

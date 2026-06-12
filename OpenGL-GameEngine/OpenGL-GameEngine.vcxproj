@@ -148,6 +148,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Light\SpotLight.cpp" />
     <ClCompile Include="src\Light\LightObject.cpp" />
     <ClCompile Include="src\Light\LightManager.cpp" />
     <ClCompile Include="src\Light\PointLight.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="include\Buffer.h" />
     <ClInclude Include="include\GeometryUtils.hpp" />
     <ClInclude Include="include\LightData.h" />
+    <ClInclude Include="include\PositionalLight.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\State.h" />
     <ClInclude Include="include\Uniform.h" />
@@ -195,6 +197,7 @@
     <ClInclude Include="include\PointLight.h" />
     <ClInclude Include="include\LightManager.h" />
     <ClInclude Include="include\LightObject.h" />
+    <ClInclude Include="include\SpotLight.h" />
     <ClInclude Include="src\Headers\Shader.h" />
     <ClInclude Include="include\VertexArray.h" />
     <ClInclude Include="include\Texture.h" />

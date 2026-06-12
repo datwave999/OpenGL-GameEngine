@@ -3,6 +3,7 @@
 #include "LightData.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -21,12 +22,18 @@ public:
                                             float ambientIntensity = 0.05f,
                                             float specularIntensity = 1.0f);
 
+    std::shared_ptr<SpotLight> getSpotLight(glm::vec3 position, glm::vec3 direction, glm::vec3 color,
+                                        float innerCutOffAngle = 12.5f, float outerCutOffAngle = 17.5f,
+                                        float radius = 50.0f, float diffuseIntensity = 1.0f,
+                                        float ambientIntensity = 0.05f, float specularIntensity = 1.0f);
+
     void UpdateData();
 
 private:
     // Lights
     std::unique_ptr<DirectionalLight> mainLight;
     std::vector<std::weak_ptr<PointLight>> pointLights;
+    std::vector<std::weak_ptr<SpotLight>> spotLights;
 
     // Light UBO data
     std::unique_ptr<Buffer> lightUBO;

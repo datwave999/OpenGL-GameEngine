@@ -31,12 +31,40 @@ struct PointLightData {
     float quadratic;
 };
 
-// 3. The Master UBO Block
+// 3. Spot Light Struct
+struct SpotLightData {
+    glm::vec3 position;
+    float padding1;
+
+    glm::vec3 direction;
+    float padding2;
+
+    glm::vec3 ambient;
+    float constant;
+
+    glm::vec3 diffuse;
+    float linear;
+
+    glm::vec3 specular;
+    float quadratic;
+
+    float cutOff;
+    float outerCutOff;
+    float padding3;
+    float padding4;
+};
+
+// 4. The Master UBO Block
 #define MAX_POINT_LIGHTS 10
+#define MAX_SPOT_LIGHTS 5
 
 struct LightUBO {
     DirectionalLightData directionalLight;
     PointLightData pointLights[MAX_POINT_LIGHTS];
+    SpotLightData spotLights[MAX_SPOT_LIGHTS];
+
     int numPointLights;
-    float pad1, pad2, pad3;
+    int numSpotLights;
+
+    float pad1, pad2;
 };
