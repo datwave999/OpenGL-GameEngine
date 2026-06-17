@@ -13,16 +13,18 @@ struct MaterialUBO {
 
 class Material {
 public:
-    Material(const std::shared_ptr<Texture>& texture, int texUnit, float shininess = 32, float specularIntensity = 1.0f);
+    Material(const std::shared_ptr<Texture>& diffMap, const std::shared_ptr<Texture>& specMap, int diffUnit, int specUnit, float shininess = 32, float specularIntensity = 1.0f);
 
     void Use(Shader* shader);
 
 private:
     std::shared_ptr<Texture> diffuseMap;
+    std::shared_ptr<Texture> specularMap;
 
     // UBO to send shininess and specularIntensity
     std::unique_ptr<Buffer> materialUBO;
     MaterialUBO uboData;
 
-    int textureUnit;
+    int diffuseUnit;
+    int specularUnit;
 };

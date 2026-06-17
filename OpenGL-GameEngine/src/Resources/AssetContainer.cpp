@@ -20,6 +20,11 @@ std::shared_ptr<Texture> AssetContainer::getDefaultTexture() {
     return defaultTex;
 }
 
+std::shared_ptr<Texture> AssetContainer::getDefaultSpecularMap()
+{
+    return getTexture("ENGINE_DEFAULT_SPECULAR_MAP", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), "texture_specular");
+}
+
 
 // Load from File
 std::shared_ptr<Texture> AssetContainer::getTexture(const std::string& key, const std::string& filepath, const std::string& type) {
@@ -56,14 +61,21 @@ std::shared_ptr<Texture> AssetContainer::getTexture(const std::string& key, glm:
     return newTex;
 }
 
-std::shared_ptr<Material> AssetContainer::getMaterial(const std::string& key, const std::shared_ptr<Texture>& texture, int texUnit, float shininess, float specularIntensity) {
+std::shared_ptr<Material> AssetContainer::getMaterial(const std::string& key, const std::shared_ptr<Texture>& diffuseMap, const std::shared_ptr<Texture>& specularMap, int diffUnit, int specUnit, float shininess, float specularIntensity) {
     auto it = materials.find(key);
     if (it != materials.end()) {
         if (std::shared_ptr<Material> sharedMat = it->second.lock()) {
             return sharedMat;
         }
     }
-    std::shared_ptr<Material> newMat = std::make_shared<Material>(texture, texUnit, shininess, specularIntensity);
+
+    // If material doesnt not have a specular map
+    std::shared_ptr<Texture> finalSpecMap = specularMap;
+    if (finalSpecMap == nullptr) {
+        finalSpecMap = getDefaultSpecularMap();
+    }
+
+    std::shared_ptr<Material> newMat = std::make_shared<Material>(diffuseMap, finalSpecMap, diffUnit, specUnit, shininess, specularIntensity);
     materials[key] = newMat;
     return newMat;
 }

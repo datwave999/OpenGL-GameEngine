@@ -1,7 +1,7 @@
 #include "Material.h"
 
-Material::Material(const std::shared_ptr<Texture>& texture, int texUnit, float shininess, float specularIntensity)
-    : diffuseMap(texture), textureUnit(texUnit) {
+Material::Material(const std::shared_ptr<Texture>& diffMap, const std::shared_ptr<Texture>& specMap, int diffUnit, int specUnit, float shininess, float specularIntensity)
+    : diffuseMap(diffMap), diffuseUnit(diffUnit), specularMap(specMap), specularUnit(specUnit) {
 
     uboData.shininess = shininess;
     uboData.specularIntensity = specularIntensity;
@@ -12,11 +12,16 @@ Material::Material(const std::shared_ptr<Texture>& texture, int texUnit, float s
 }
 
 void Material::Use(Shader* shader) {
-    if (!diffuseMap) return;
 
-    diffuseMap->Use(textureUnit);
+    if (diffuseMap) {
+        diffuseMap->Use(diffuseUnit);
+        shader->setUniform(Uniform::materialDiffuse, diffuseUnit);
+    }
 
-    shader->setUniform(Uniform::texture1, textureUnit);
+    if (specularMap) {
+        specularMap->Use(specularUnit);
+        shader->setUniform(Uniform::materialSpecular, specularUnit);
+    }
 
     materialUBO->bindBase(2);
 }

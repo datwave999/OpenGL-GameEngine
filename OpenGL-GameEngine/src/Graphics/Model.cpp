@@ -49,6 +49,9 @@ void Model::processNode(aiNode* node, const aiScene* scene) {
 }
 
 ModelNode Model::processMesh(aiMesh* mesh, const aiScene* scene) {
+
+    if (!assetManager) throw std::runtime_error("ERROR::MODEL: Attempted to load a model without providing a valid AssetContainer!");
+
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
 
@@ -84,15 +87,23 @@ ModelNode Model::processMesh(aiMesh* mesh, const aiScene* scene) {
     }
 
     // C. Extract Material & Textures
-    std::shared_ptr<Texture> diffuseMap = assetManager ? assetManager->getDefaultTexture() : nullptr;
+    std::shared_ptr<Texture> diffuseMap = assetManager->getDefaultTexture();
+    std::shared_ptr<Texture> specularMap = nullptr;
 
     float shininess = 32.0f;
     float specularIntensity = 0.0f;
 
+    // Unique key for material caching
+    std::string matKey = "default_material_" + std::to_string(mesh->mMaterialIndex);
+
     if (mesh->mMaterialIndex >= 0) {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-        // 1. Get the Diffuse Texture using the Global Asset Cache
+        aiString matName;
+        if (material->Get(AI_MATKEY_NAME, matName) == AI_SUCCESS) matKey = matName.C_Str();
+        
+
+        // 1. Get Diffuse Texture
         if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
             aiString str;
             material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
@@ -103,9 +114,20 @@ ModelNode Model::processMesh(aiMesh* mesh, const aiScene* scene) {
             std::string filename = (lastSlash != std::string::npos) ? assimpPath.substr(lastSlash + 1) : assimpPath;
             std::string texPath = directory + "/" + filename;
 
-            if (assetManager) {
-                diffuseMap = assetManager->getTexture(filename, texPath, "texture_diffuse");
-            }
+            diffuseMap = assetManager->getTexture(texPath, texPath, "texture_diffuse");
+        }
+
+        // 2. Get Specular Texture
+        if (material->GetTextureCount(aiTextureType_SPECULAR) > 0) {
+            aiString str;
+            material->GetTexture(aiTextureType_SPECULAR, 0, &str);
+
+            std::string assimpPath = str.C_Str();
+            size_t lastSlash = assimpPath.find_last_of("/\\");
+            std::string filename = (lastSlash != std::string::npos) ? assimpPath.substr(lastSlash + 1) : assimpPath;
+            std::string texPath = directory + "/" + filename;
+
+            specularMap = assetManager->getTexture(texPath, texPath, "texture_specular");
         }
 
         // 2. Get Shininess (The 'Ns' value in the .mtl file)
@@ -120,7 +142,7 @@ ModelNode Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 
     // D. Build the final ModelNode
     auto finalMesh = std::make_shared<Mesh>(vertices, indices);
-    auto finalMat = std::make_shared<Material>(diffuseMap, 0, shininess, specularIntensity);
+    auto finalMat = assetManager->getMaterial(matKey, diffuseMap, specularMap, 0, 1, shininess, specularIntensity);
 
     return { finalMesh, finalMat };
 }

@@ -1,11 +1,12 @@
 #include "Shader.h"
 
 static const char* UniformNames[] = {
-	"texture1",
 	"model",
 	"view",
 	"projection",
 	"normalMatrix",
+	"materialDiffuse",
+	"materialSpecular",
 	"cameraPos"
 };
 
@@ -101,7 +102,7 @@ GLint Shader::GetUniformLocation(Uniform name) const {
 
 	if (uniformLocationCache[index] == -2) {
 		uniformLocationCache[index] = glGetUniformLocation(shaderID, UniformNames[index]);
-		if (uniformLocationCache[index] == -1) std::cout << "Warning: Tried to set uniform '" << UniformNames[index] << "' but it doesn't exist or isn't being used!" << std::endl;
+		if (uniformLocationCache[index] == -1) std::cout << "Warning: Tried to set uniform '" << UniformNames[index]<< "' in shader ID: "<< shaderID << ", but it doesn't exist or isn't being used!" << std::endl;
 	}
 	return uniformLocationCache[index];
 }

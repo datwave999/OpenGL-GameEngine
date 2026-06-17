@@ -43,7 +43,7 @@ Texture::Texture(glm::vec4 color, const std::string& type) : type(type), texture
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
 	// Create a 1-pixel array holding your color data
-	float pixel[] = { color.r, color.g, color.b, color.a};
+	float pixel[] = {color.r, color.g, color.b, color.a};
 
 	// Upload the single pixel to the GPU
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, pixel);

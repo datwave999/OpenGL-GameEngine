@@ -11,7 +11,7 @@ class Texture
 {
 public:
 
-	Texture(GLuint texID, const std::string& type = "texture_diffuse");
+	Texture(GLuint texID, const std::string& type);
 	Texture(const std::string& path, const std::string& type = "texture_diffuse");
 	Texture(glm::vec4 color, const std::string& type = "texture_diffuse");
 

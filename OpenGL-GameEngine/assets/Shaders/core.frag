@@ -8,7 +8,8 @@ in vec3 Normal;
 in vec3 FragPos;
 
 // --- STANDARD UNIFORMS ---
-uniform sampler2D texture1;
+uniform sampler2D materialDiffuse;
+uniform sampler2D materialSpecular;
 uniform vec3 cameraPos; 
 
 // --- UBO: MATERIAL DATA (Binding 2) ---
@@ -68,9 +69,9 @@ layout(std140, binding = 1) uniform LightData {
 };
 
 // --- FUNCTION PROTOTYPES ---
-vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir, vec3 albedo);
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 albedo);
-vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 albedo);
+vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir, vec3 albedo, float specMapValue);
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 albedo, float specMapValue);
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 albedo, float specMapValue);
 
 void main() {
     // 1. Setup global math variables
@@ -78,20 +79,22 @@ void main() {
     vec3 viewDir = normalize(cameraPos - FragPos);
     
     // 2. Sample the texture
-    vec4 texColour = texture(texture1, TexCoords);
+    vec4 texColour = texture(materialDiffuse, TexCoords);
     vec3 albedo = texColour.rgb;
 
+    float specMapValue = texture(materialSpecular, TexCoords).r;
+
     // 3. Directional Light calculation
-    vec3 result = CalcDirectionalLight(directionalLight, norm, viewDir, albedo);
+    vec3 result = CalcDirectionalLight(directionalLight, norm, viewDir, albedo, specMapValue);
 
     // 4. Point Lights calculation
     for (int i = 0; i < numPointLights; i++) {
-        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir, albedo);
+        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir, albedo, specMapValue);
     }
 
     // 5. Spot Lights calculation
     for (int i = 0; i < numSpotLights; i++) {
-        result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir, albedo);
+        result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir, albedo, specMapValue);
     }
 
     // 6. Final Output
@@ -102,7 +105,7 @@ void main() {
 // --- FUNCTION IMPLEMENTATIONS ---
 // --------------------------------------------------------
 
-vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir, vec3 albedo) {
+vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir, vec3 albedo, float specMapValue) {
     vec3 lightDir = (-light.direction);
     
     // Diffuse calculation
@@ -115,12 +118,12 @@ vec3 CalcDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir, vec
     // Combine
     vec3 ambient = light.ambient * albedo;
     vec3 diffuse = light.diffuse * diff * albedo;
-    vec3 specular = light.specular * matSpecularIntens * spec; 
+    vec3 specular = light.specular * matSpecularIntens * specMapValue * spec; 
 
     return (ambient + diffuse + specular);
 }
 
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 albedo) {
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 albedo, float specMapValue) {
     vec3 lightVector = light.position - fragPos;
     float distance = length(lightVector);
     vec3 lightDir = lightVector / distance;
@@ -138,12 +141,12 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
     // Combine
     vec3 ambient = light.ambient * albedo * attenuation;
     vec3 diffuse = light.diffuse * diff * albedo * attenuation;
-    vec3 specular = light.specular * matSpecularIntens * spec * attenuation; 
+    vec3 specular = light.specular * matSpecularIntens * specMapValue * spec * attenuation; 
 
     return (ambient + diffuse + specular);
 }
 
-vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 albedo) {
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 albedo, float specMapValue) {
     vec3 lightVector = light.position - fragPos;
     float distance = length(lightVector);
     vec3 lightDir = lightVector / distance;
@@ -166,7 +169,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec
     // Combine results
     vec3 ambient = light.ambient * albedo * attenuation;
     vec3 diffuse = light.diffuse * diff * albedo * attenuation * intensity;
-    vec3 specular = light.specular * matSpecularIntens * spec * attenuation * intensity;
+    vec3 specular = light.specular * matSpecularIntens * specMapValue * spec * attenuation * intensity;
 
     return (ambient + diffuse + specular);
 }

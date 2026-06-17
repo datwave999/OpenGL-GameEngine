@@ -46,12 +46,12 @@ void PlayState::Initialize(Application* app) {
     auto greenTex = assets.getTexture("green", glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
     // 6. Get Materials
-    auto obamaMat = assets.getMaterial("obamaSandwich", obamaTex, 0, 64.0f, 1.0f);
-    auto flagMat = assets.getMaterial("communityFlag", flagTex, 0, 16.0f, 0.6f);
-    auto greyMat = assets.getMaterial("greyFloor", greyPrototypeTex, 0, 16.0f, 0.6f);
-    auto blueMat = assets.getMaterial("blueMat", blueTex, 0);
-    auto redMat = assets.getMaterial("redMat", redTex, 0);
-    auto greenMat = assets.getMaterial("greenMat", greenTex, 0);
+    auto obamaMat = assets.getMaterial("obamaSandwich", obamaTex, nullptr, 0, 1, 64.0f, 1.0f);
+    auto flagMat = assets.getMaterial("communityFlag", flagTex, nullptr, 0, 1, 16.0f, 0.6f);
+    auto greyMat = assets.getMaterial("greyFloor", greyPrototypeTex, nullptr, 0, 1, 16.0f, 0.6f);
+    auto blueMat = assets.getMaterial("blueMat", blueTex, nullptr, 0, 1);
+    auto redMat = assets.getMaterial("redMat", redTex, nullptr, 0, 1);
+    auto greenMat = assets.getMaterial("greenMat", greenTex, nullptr, 0, 1);
 
     // 7. Get Models
     auto obamaCubeModel = assets.getModel("obamaCube", cubeMesh, obamaMat);
@@ -83,11 +83,10 @@ void PlayState::Initialize(Application* app) {
     objects[5]->transform.SetPosition(glm::vec3(0.0f, -1.0f, 0.0f));
     objects[5]->transform.SetScale(glm::vec3(100.0f, 0.1f, 100.0f));
 
-
     // 10. Add Lighting to the Scene
     lights.Initialize();
  
-    lights.setDirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.8f, 0.8f, 0.8f), 0.1f); // Whiteish sun
+    lights.setDirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.8f, 0.8f, 0.8f), 0.8f); // Whiteish sun
 
     auto blueLight = lights.addPointLight(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), 50.0f, 0.6f); // Blue
     auto redLight = lights.addPointLight(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Red
@@ -156,9 +155,9 @@ void PlayState::Render(Application* app) {
     // Unlit shader for Light Objects
     unlitShader->enableShader();
 
-        for (const auto& lightObj : lightObjects) {
-            lightObj->Render(unlitShader.get());
-        }
+    for (const auto& lightObj : lightObjects) {
+        lightObj->Render(unlitShader.get());
+    }
 
     unlitShader->disableShader();
 }
