@@ -88,10 +88,10 @@ ModelNode Model::processMesh(aiMesh* mesh, const aiScene* scene) {
 
     // C. Extract Material & Textures
     std::shared_ptr<Texture> diffuseMap = assetManager->getDefaultTexture();
-    std::shared_ptr<Texture> specularMap = nullptr;
+    std::shared_ptr<Texture> specularMap = assetManager->getDefaultSpecularMap();
 
     float shininess = 32.0f;
-    float specularIntensity = 0.0f;
+    float specularIntensity = 1.0f;
 
     // Unique key for material caching
     std::string matKey = "default_material_" + std::to_string(mesh->mMaterialIndex);

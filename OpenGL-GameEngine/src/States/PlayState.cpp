@@ -61,6 +61,7 @@ void PlayState::Initialize(Application* app) {
 
     auto sedan = assets.getModel("sedan", "assets/Models/sedan/sedan.obj");
     auto race = assets.getModel("race", "assets/Models/race/race.obj");
+    auto backpack = assets.getModel("backpack", "assets/Models/backpack/backpack.obj", true);
 
     auto blueSphere = assets.getModel("blueLight", sphereMesh, blueMat);
     auto redSphere = assets.getModel("redLight", sphereMesh, redMat);
@@ -75,6 +76,7 @@ void PlayState::Initialize(Application* app) {
     objects.push_back(std::make_unique<Object>(sedan));
     objects.push_back(std::make_unique<Object>(race));
     objects.push_back(std::make_unique<Object>(floorModel));
+    objects.push_back(std::make_unique<Object>(backpack));
 
     objects[1]->transform.SetPosition(glm::vec3(0.0f, 2.0f, 0.0f));
     objects[2]->transform.SetPosition(glm::vec3(0.0f, -1.0f, 3.0f));
@@ -82,6 +84,7 @@ void PlayState::Initialize(Application* app) {
     objects[4]->transform.SetPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
     objects[5]->transform.SetPosition(glm::vec3(0.0f, -1.0f, 0.0f));
     objects[5]->transform.SetScale(glm::vec3(100.0f, 0.1f, 100.0f));
+    objects[6]->transform.SetPosition(glm::vec3(0.0f, 3.0f, 10.0f));
 
     // 10. Add Lighting to the Scene
     lights.Initialize();
@@ -89,7 +92,7 @@ void PlayState::Initialize(Application* app) {
     lights.setDirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.8f, 0.8f, 0.8f), 0.8f); // Whiteish sun
 
     auto blueLight = lights.addPointLight(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), 50.0f, 0.6f); // Blue
-    auto redLight = lights.addPointLight(glm::vec3(2.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Red
+    auto redLight = lights.addPointLight(glm::vec3(0.0f, 5.0f, 12.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Red
     auto greenLight = lights.addPointLight(glm::vec3(-2.0f, 1.0f, -2.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Green
 
     auto yellowSpotLight = lights.addSpotLight(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), 15.0f, 20.0f, 100.0f);

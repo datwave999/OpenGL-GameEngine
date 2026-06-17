@@ -21,7 +21,17 @@ Texture::Texture(const std::string& path, const std::string& type) : path(path),
 
 	if (data) {
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+		
+		GLenum format = GL_RGB;
+		if (nrChannels == 1)
+			format = GL_RED;
+		else if (nrChannels == 2)
+			format = GL_RG;
+		else if (nrChannels == 3)
+			format = GL_RGB;
+		else if (nrChannels == 4)
+			format = GL_RGBA;
+
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
