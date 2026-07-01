@@ -1,4 +1,4 @@
-#include "Input.h"
+#include "Core/Input.h"
 
 void Input::EndFrame() {
 	// Resets all changed states back to false for the next frame

@@ -1,11 +1,11 @@
-#include "Application.h"
+#include "Core/Application.h"
 
 #include <iostream>
 #include <STB/stb_image.h>  
 
-#include "Window.h"
-#include "Input.h" 
-#include "PlayState.h" // To push initial state
+#include "Core/Window.h"
+#include "Core/Input.h" 
+#include "Core/PlayState.h" // To push initial state
 
 
 Application::Application() : lastFrameTime(0.0), frameCount(0), fpsTimer(0.0) {

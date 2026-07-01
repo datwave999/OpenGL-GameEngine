@@ -1,4 +1,4 @@
-#include "Buffer.h"
+#include "Graphics/Buffer.h"
 
 Buffer::Buffer(GLenum type, GLsizeiptr size, const void* data, GLenum drawType) : bufferType(type)
 {

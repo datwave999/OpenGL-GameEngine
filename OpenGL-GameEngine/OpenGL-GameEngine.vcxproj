@@ -148,61 +148,67 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Light\SpotLight.cpp" />
-    <ClCompile Include="src\Light\LightObject.cpp" />
-    <ClCompile Include="src\Light\LightManager.cpp" />
-    <ClCompile Include="src\Light\PointLight.cpp" />
-    <ClCompile Include="src\Light\DirectionalLight.cpp" />
-    <ClCompile Include="src\States\PauseState.cpp" />
-    <ClCompile Include="src\States\PlayState.cpp" />
-    <ClCompile Include="src\Graphics\Model.cpp" />
+    <ClCompile Include="src\Core\Camera.cpp" />
+    <ClCompile Include="src\Core\PauseState.cpp" />
+    <ClCompile Include="src\Core\PlayState.cpp" />
+    <ClCompile Include="src\deprecated\AssetContainer.cpp" />
+    <ClCompile Include="src\deprecated\DirectionalLight.cpp" />
+    <ClCompile Include="src\deprecated\LightManager.cpp" />
+    <ClCompile Include="src\deprecated\LightObject.cpp" />
+    <ClCompile Include="src\deprecated\Material.cpp" />
+    <ClCompile Include="src\deprecated\Mesh.cpp" />
+    <ClCompile Include="src\deprecated\Model.cpp" />
+    <ClCompile Include="src\deprecated\Object.cpp" />
+    <ClCompile Include="src\deprecated\PointLight.cpp" />
+    <ClCompile Include="src\deprecated\SpotLight.cpp" />
+    <ClCompile Include="src\deprecated\Texture.cpp" />
+    <ClCompile Include="src\deprecated\Transform.cpp" />
+
     <ClCompile Include="src\Core\Application.cpp" />
     <ClCompile Include="src\Core\Input.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Graphics\Buffer.cpp" />
-    <ClCompile Include="src\Graphics\Material.cpp" />
-    <ClCompile Include="src\Graphics\Mesh.cpp" />
+
     <ClCompile Include="src\Graphics\Shader.cpp" />
-    <ClCompile Include="src\Graphics\Texture.cpp" />
+
     <ClCompile Include="src\Graphics\VertexArray.cpp" />
     <ClCompile Include="lib\glad.c" />
     <ClCompile Include="lib\stb.cpp" />
-    <ClCompile Include="src\Resources\AssetContainer.cpp" />
-    <ClCompile Include="src\Scene\Camera.cpp" />
-    <ClCompile Include="src\Scene\Object.cpp" />
-    <ClCompile Include="src\Scene\Transform.cpp" />
+
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Resources\StandardMeshes.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\DirectionalLight.h" />
-    <ClInclude Include="include\AssetContainer.h" />
-    <ClInclude Include="include\Camera.h" />
-    <ClInclude Include="include\Application.h" />
-    <ClInclude Include="include\Buffer.h" />
-    <ClInclude Include="include\GeometryUtils.hpp" />
-    <ClInclude Include="include\LightData.h" />
-    <ClInclude Include="include\PositionalLight.h" />
-    <ClInclude Include="include\Shader.h" />
-    <ClInclude Include="include\State.h" />
-    <ClInclude Include="include\Uniform.h" />
-    <ClInclude Include="include\Window.h" />
-    <ClInclude Include="include\Mesh.h" />
-    <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\Object.h" />
-    <ClInclude Include="include\Material.h" />
-    <ClInclude Include="include\Model.h" />
-    <ClInclude Include="include\PlayState.h" />
-    <ClInclude Include="include\PauseState.h" />
-    <ClInclude Include="include\PointLight.h" />
-    <ClInclude Include="include\LightManager.h" />
-    <ClInclude Include="include\LightObject.h" />
-    <ClInclude Include="include\SpotLight.h" />
-    <ClInclude Include="src\Headers\Shader.h" />
-    <ClInclude Include="include\VertexArray.h" />
-    <ClInclude Include="include\Texture.h" />
-    <ClInclude Include="include\Transform.h" />
-    <ClInclude Include="include\StandardMeshes.h" />
+    <ClInclude Include="include\Core\Application.h" />
+    <ClInclude Include="include\Core\Camera.h" />
+    <ClInclude Include="include\Core\Input.h" />
+    <ClInclude Include="include\Core\PauseState.h" />
+    <ClInclude Include="include\Core\PlayState.h" />
+    <ClInclude Include="include\Core\State.h" />
+    <ClInclude Include="include\Core\Window.h" />
+    <ClInclude Include="include\deprecated\AssetContainer.h" />
+    <ClInclude Include="include\deprecated\DirectionalLight.h" />
+    <ClInclude Include="include\deprecated\LightData.h" />
+    <ClInclude Include="include\deprecated\LightManager.h" />
+    <ClInclude Include="include\deprecated\LightObject.h" />
+    <ClInclude Include="include\deprecated\Material.h" />
+    <ClInclude Include="include\deprecated\Mesh.h" />
+    <ClInclude Include="include\deprecated\Model.h" />
+    <ClInclude Include="include\deprecated\Object.h" />
+    <ClInclude Include="include\deprecated\PointLight.h" />
+    <ClInclude Include="include\deprecated\PositionalLight.h" />
+    <ClInclude Include="include\deprecated\SpotLight.h" />
+    <ClInclude Include="include\deprecated\Texture.h" />
+    <ClInclude Include="include\deprecated\Transform.h" />
+
+    <ClInclude Include="include\Graphics\Buffer.h" />
+    <ClInclude Include="include\Graphics\GeometryUtils.hpp" />
+    <ClInclude Include="include\Graphics\Shader.h" />
+    <ClInclude Include="include\Graphics\Uniform.h" />
+    <ClInclude Include="include\Graphics\VertexArray.h" />
+
+    <ClInclude Include="include\Resources\StandardMeshes.h" />
+
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shaders\core.frag" />

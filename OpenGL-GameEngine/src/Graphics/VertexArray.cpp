@@ -1,4 +1,4 @@
-#include "VertexArray.h"
+#include "Graphics/VertexArray.h"
 #include <cassert>
 
 VertexArray::VertexArray() {

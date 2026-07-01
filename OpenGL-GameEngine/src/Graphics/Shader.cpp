@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include "Graphics/Shader.h"
 
 static const char* UniformNames[] = {
 	"model",

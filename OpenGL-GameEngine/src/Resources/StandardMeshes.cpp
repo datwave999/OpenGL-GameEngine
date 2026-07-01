@@ -1,5 +1,5 @@
-#include "StandardMeshes.h"
-#include "GeometryUtils.hpp" 
+#include "Resources/StandardMeshes.h"
+#include "Graphics/GeometryUtils.hpp" 
 #include <vector>
 
 constexpr float PI = 3.14159265359f;
