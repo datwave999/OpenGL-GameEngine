@@ -366,3 +366,8 @@ FodyWeavers.xsd
 .agents/
 
 .obsidian
+
+# AI Agent generated artifacts
+implementation_plan.md
+task.md
+walkthrough.md
