@@ -1,3 +1,4 @@
+
 #version 460 core
 
 out vec4 FragColour;
@@ -10,7 +11,7 @@ in vec3 FragPos;
 // --- STANDARD UNIFORMS ---
 uniform sampler2D materialDiffuse;
 uniform sampler2D materialSpecular;
-uniform vec3 cameraPos; 
+uniform vec3 cameraPos;
 
 // --- UBO: MATERIAL DATA (Binding 2) ---
 layout(std140, binding = 2) uniform MaterialData {

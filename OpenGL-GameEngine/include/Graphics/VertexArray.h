@@ -18,6 +18,8 @@ public:
 	void bind() const;
 	void unbind() const;
 
+	GLuint getID() const { return vaoID; }
+
 	~VertexArray();
 
 private:

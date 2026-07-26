@@ -1,23 +1,19 @@
 #pragma once
 
 #include "Core/State.h"
-#include <memory>
-
-// Forward Declarations
-class Shader;
-class Mesh;
+#include <cstdint>
 
 class PauseState : public State {
 public:
-    PauseState();
+    PauseState(Application* app);
     ~PauseState() override;
 
-    void Initialize(Application* app) override;
-    void Update(Application* app, float dt) override;
-    void Render(Application* app) override;
+    void Initialize() override;
+    void Update(float dt) override;
+    void Render() override;
     bool isOpaque() const override { return false; }
 
 private:
-    std::shared_ptr<Shader> overlayShader;
-    std::shared_ptr<Mesh> overlayMesh;
+    uint32_t overlayShaderHandle;
+    uint32_t overlayMeshHandle;
 };

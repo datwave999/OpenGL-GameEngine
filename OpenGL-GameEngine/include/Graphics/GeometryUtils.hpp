@@ -3,7 +3,7 @@
 #include <vector>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "deprecated/Mesh.h"
+#include "Resources/AssetData.h"
 
 namespace GeometryUtils {
     // Only used for Meshes with unique vertices for each face

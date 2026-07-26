@@ -25,6 +25,8 @@ bool Application::Initialize() {
         return false;
     }
 
+    assets.Initialize();
+
     // 2. Global Engine Settings
     glEnable(GL_DEPTH_TEST);
     glfwSwapInterval(0); // VSync (0 = Off, 1 = On)
@@ -37,7 +39,7 @@ bool Application::Initialize() {
     glfwSetScrollCallback(window->getNativeWindow(), Input::mouseWheelCallback);
 
     // 4. START THE GAME
-    PushState(std::make_unique<PlayState>());
+    PushState(std::make_unique<PlayState>(this));
 
     // 5. Set starting time
     lastFrameTime = glfwGetTime();
@@ -47,7 +49,7 @@ bool Application::Initialize() {
 
 // --- State Management ---
 void Application::PushState(std::unique_ptr<State> state) {
-    state->Initialize(this);
+    state->Initialize();
     states.push_back(std::move(state));
 }
 
@@ -64,7 +66,7 @@ void Application::Update(float dt) {
 
     // Top State gets Updated
     if (!states.empty()) {
-        states.back()->Update(this, dt);
+        states.back()->Update(dt);
     }
 }
 
@@ -82,7 +84,7 @@ void Application::Render() {
             break;
         }
     }
-    for (int i = startIndex; i < states.size(); i++) states[i]->Render(this);
+    for (int i = startIndex; i < states.size(); i++) states[i]->Render();
 }
 
 
@@ -124,5 +126,5 @@ void Application::Shutdown() {
     states.clear(); 
     
     // Clear asset cache (just empty map keys)
-    assets.CleanCache();
+    // assets.CleanCache();
 }

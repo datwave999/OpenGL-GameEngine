@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 # Agent custom settings and skills
 .agents/
+
+.obsidian

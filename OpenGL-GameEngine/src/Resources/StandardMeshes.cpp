@@ -4,7 +4,7 @@
 
 constexpr float PI = 3.14159265359f;
 
-std::shared_ptr<Mesh> StandardMeshes::CreateCube(float uvScale) {
+MeshData StandardMeshes::CreateCube(float uvScale) {
     std::vector<Vertex> vertices = {
         // FRONT FACE
         {{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}, // 0
@@ -54,10 +54,10 @@ std::shared_ptr<Mesh> StandardMeshes::CreateCube(float uvScale) {
 
     GeometryUtils::CalculateFlatNormals(vertices, indices);
 
-    return std::make_shared<Mesh>(vertices, indices);
+    return { vertices, indices };
 }
 
-std::shared_ptr<Mesh> StandardMeshes::CreateSphere(int sectors, int stacks) {
+MeshData StandardMeshes::CreateSphere(int sectors, int stacks) {
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
 
@@ -108,10 +108,10 @@ std::shared_ptr<Mesh> StandardMeshes::CreateSphere(int sectors, int stacks) {
 
     GeometryUtils::CalculateSmoothNormals(vertices, indices);
 
-    return std::make_shared<Mesh>(vertices, indices);
+    return { vertices, indices };
 }
 
-std::shared_ptr<Mesh> StandardMeshes::CreatePlane(float uvScale) {
+MeshData StandardMeshes::CreatePlane(float uvScale) {
 
     const float t = 0.05f; // Half-thickness
 
@@ -164,22 +164,22 @@ std::shared_ptr<Mesh> StandardMeshes::CreatePlane(float uvScale) {
 
     GeometryUtils::CalculateFlatNormals(vertices, indices);
 
-    return std::make_shared<Mesh>(vertices, indices);
+    return { vertices, indices };
 }
 
-std::shared_ptr<Mesh> StandardMeshes::CreateOverlay()
+MeshData StandardMeshes::CreateOverlay()
 {
-    std::vector<Vertex> quadVertices = {
+    std::vector<Vertex> vertices = {
     {{-1.0f,  1.0f,  0.0f},   {0.0f, 0.0f, 1.0f},   {0.0f, 1.0f}},
     {{-1.0f, -1.0f,  0.0f},   {0.0f, 0.0f, 1.0f},   {0.0f, 0.0f}},
     {{ 1.0f, -1.0f,  0.0f},   {0.0f, 0.0f, 1.0f},   {1.0f, 0.0f}},
     {{ 1.0f,  1.0f,  0.0f},   {0.0f, 0.0f, 1.0f},   {1.0f, 1.0f}}
     };
 
-    std::vector<GLuint> quadIndices = {
+    std::vector<GLuint> indices = {
         0, 1, 2,
         0, 2, 3
     };
 
-    return std::make_unique<Mesh>(quadVertices, quadIndices);
+    return { vertices, indices };
 }

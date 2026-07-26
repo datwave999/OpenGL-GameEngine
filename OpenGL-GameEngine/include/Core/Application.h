@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <memory>
-#include "deprecated/AssetContainer.h"
+#include "Resources/AssetManager.h"
 #include "Core/State.h"
 
 // Forward Declarations
@@ -24,7 +24,7 @@ public:
 
     // --- Accessors for States ---
     Window* GetWindow() const { return window.get(); }
-    AssetContainer& GetAssets() { return assets; }
+    AssetManager& GetAssets() { return assets; }
 
 private:
     // --- Internal Loop ---
@@ -38,7 +38,7 @@ private:
 
     // --- Core Systems ---
     std::unique_ptr<Window> window;
-    AssetContainer assets;
+    AssetManager assets;
 
     // --- State Stack ---
     std::vector<std::unique_ptr<State>> states;

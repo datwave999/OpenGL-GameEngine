@@ -3,40 +3,43 @@
 #include "Core/State.h"
 #include <vector>
 #include <memory>
+#include <cstdint>
 
-#include "deprecated/DirectionalLight.h"
-#include "deprecated/PointLight.h"
-#include "deprecated/LightManager.h"
+#include <entt/entt.hpp>
+#include "ECS/Entity.h"
+#include "ECS/Systems/TransformSystem.h"
+#include "ECS/Systems/LightSystem.h"
+#include "ECS/Systems/RenderSystem.h"
 
 class Camera;
-class Object;
 class Shader;
-class LightObject;
-
 
 class PlayState : public State {
 public:
-    PlayState();
+    PlayState(Application* app);
     ~PlayState() override;
 
     // State Interface Overrides
-    void Initialize(Application* app) override;
-    void Update(Application* app, float dt) override;
-    void Render(Application* app) override;
+    void Initialize() override;
+    void Update(float dt) override;
+    void Render() override;
     bool isOpaque() const override { return true; }
 
 private:
     // --- Game Systems ---
     std::unique_ptr<Camera> camera;
-    std::vector<std::unique_ptr<Object>> objects;
-    std::shared_ptr<Shader> coreShader;
+    
+    // ECS
+    entt::registry registry;
+    TransformSystem transformSystem;
+    LightSystem lightSystem;
+    RenderSystem renderSystem;
 
-    // --- Lighting ---
-    LightManager lights;
+    // Shaders
+    uint32_t coreShaderHandle;
+    uint32_t unlitShaderHandle;
+    uint32_t overlayShaderHandle;
 
-    std::vector<std::unique_ptr<LightObject>> lightObjects;
-    std::shared_ptr<Shader> unlitShader;
-
-    // --- Preloads ---
-    std::shared_ptr<Shader> overlayShaderPreload;
+    // entities we want to animate in Update() are stored
+    std::unordered_map<std::string, Entity> entities;
 };
