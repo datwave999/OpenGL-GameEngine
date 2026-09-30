@@ -145,7 +145,6 @@ void PlayState::Update(float dt) {
 
     // --- UPDATE CAMERA ---
     camera->Update(dt);
-    camera->processMouseScroll(Input::getScrollDY());
     camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
 }
 

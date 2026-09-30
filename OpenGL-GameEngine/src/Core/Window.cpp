@@ -22,8 +22,14 @@ Window::Window(int widthInt, int heightInt, const char* title) : width(widthInt)
 		glfwTerminate();
 		return;
 	}
+
+	// Tie this C++ Window instance to the GLFWwindow (Helps get window* ptr through GLFWwindow*)
+	glfwSetWindowUserPointer(window, this);
+
+	// Set this window's context to the current OpenGL context
 	glfwMakeContextCurrent(window);
 
+	// Initialize GLAD
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		glfwTerminate();
@@ -48,10 +54,6 @@ void Window::pollEvents() {
 	glfwPollEvents();
 }
 
-void Window::processInput() {
-	
-}
-
 int Window::getWidth() const {
 	return width;
 }
@@ -66,8 +68,17 @@ void Window::setWindowTitle(const char* newTitle)
 }
 
 
-void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
+void Window::framebuffer_size_callback(GLFWwindow* window, int _width, int _height) {
+	glViewport(0, 0, _width, _height);
+
+	// get the window ptr (this ptr)
+	Window* myWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	// update internal width and height variables
+	if (myWindow != nullptr) {
+		myWindow->width = _width;
+		myWindow->height = _height;
+	}
 }
 
 Window::~Window() {

@@ -27,6 +27,8 @@ bool Input::keysChanged[GLFW_KEY_LAST] = { 0 };
 
 // Key state callback
 void Input::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if (key < 0 || key >= GLFW_KEY_LAST) return; //Incase unmapped key is pressed
+
 	if (action != GLFW_RELEASE) {
 		if (!keys[key]) keys[key] = true;
 	} 

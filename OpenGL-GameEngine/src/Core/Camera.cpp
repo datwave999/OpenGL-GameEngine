@@ -55,6 +55,12 @@ void Camera::Update(float dt) {
 
         updateCameraVectors();
     }
+
+    // 3. FOV changer
+    FOV -= static_cast<float>(Input::getScrollDY()) * 2.0f;
+
+    if (FOV < 1.0f) FOV = 1.0f;
+    if (FOV > 90.0f) FOV = 90.0f;
 }
 
 // --- DELEGATION ---
@@ -86,13 +92,6 @@ glm::mat4 Camera::getProjectionMatrix(float screenWidth, float screenHeight) con
 void Camera::setMovementSpeed(float speed) {
     if (speed < 0.0f) speed = 0.0f;
     MovementSpeed = speed;
-}
-
-void Camera::processMouseScroll(double yOffset) {
-    FOV -= static_cast<float>(yOffset) * 2.0f;
-
-    if (FOV < 1.0f) FOV = 1.0f;
-    if (FOV > 90.0f) FOV = 90.0f;
 }
 
 // --- INTERNAL MATH ---

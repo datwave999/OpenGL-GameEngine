@@ -61,9 +61,6 @@ void Application::PopState() {
 
 // --- Internal Engine Logic ---
 void Application::Update(float dt) {
-    // OS-level things 
-    window->processInput();
-
     // Top State gets Updated
     if (!states.empty()) {
         states.back()->Update(dt);
@@ -104,7 +101,7 @@ void Application::Run() {
         frameCount++;
 
         if (fpsTimer >= 1.0) {
-            std::string newTitle = "OpenGL Game Engine - FPS: " + std::to_string(frameCount);
+            std::string newTitle = "OpenGL Rendering Engine - FPS: " + std::to_string(frameCount);
             window->setWindowTitle(newTitle.c_str());
             fpsTimer -= 1.0;
             frameCount = 0;

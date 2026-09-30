@@ -34,7 +34,6 @@ public:
 
     // --- SETTERS & MODIFIERS ---
     void setMovementSpeed(float speed);
-    void processMouseScroll(double yOffset);
 
 private:
     // Camera Attributes

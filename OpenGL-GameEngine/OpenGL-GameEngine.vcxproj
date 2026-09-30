@@ -202,6 +202,7 @@
     <None Include="assets\Shaders\overlay.vert" />
     <None Include="assets\Shaders\unlit.frag" />
     <None Include="assets\Shaders\unlit.vert" />
+    <None Include="docs\DevLog.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
