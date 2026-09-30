@@ -35,11 +35,6 @@ private:
     LightSystem lightSystem;
     RenderSystem renderSystem;
 
-    // Shaders
-    uint32_t coreShaderHandle;
-    uint32_t unlitShaderHandle;
-    uint32_t overlayShaderHandle;
-
     // entities we want to animate in Update() are stored
     std::unordered_map<std::string, Entity> entities;
 };

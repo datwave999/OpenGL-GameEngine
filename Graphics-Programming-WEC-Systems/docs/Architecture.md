@@ -96,5 +96,39 @@ Currently a standalone C++ Class [Will be changed to be a component in the ECS a
 		- for Movement speed (not currently used anywhere)
 
 ## States (PlayState and PauseState):
-### Playstate:
-- 
+### PlayState:
+- **Owns** (Private variables):
+	- Camera (unique_ptr)
+	- ECS Core: `entt::registry` (contiguous memory database where all components live)
+	- Systems: `TransformSystem`, `LightSystem`, and `RenderSystem`
+	- Entities Map: `std::unordered_map<std::string, Entity>` used as a sandbox to track specific objects [Anti-pattern: Just for tesing purposes, but doing this defeats the purpose of ECS]
+- **Working / Life Cycle**:
+	- Initialize: 
+		- Sets input mode (locks and hides cursor for FPS controls)
+		- Uses the global AssetManager to compile shaders, generate standard meshes, load textures, and load 3D models via Assimp
+		- Creates Entities, adds components (Transform, Render, Lights) to them via ECS, and stores them in the entities map
+	- Update:
+		- Checks for ESC key -> calls `app->PushState` to overlay the PauseState and immediately `return;` (freezing PlayState logic)
+		- accesses specific entities from the map and manipulates their transforms (rotating and movement stuff) [testing purposes]
+		- System Pipeline: calls `transformSystem.Update` (calculates local-to-world matrices) and `lightSystem.Update` (sorts lights and pushes UBO to GPU)
+		- Updates Camera (movement, fov) and pushes matrices to GPU UBO
+	- Render:
+		- No raw openGL math. Simply delegates to `renderSystem.Render`, passing the registry, assets, and camera position
+	- isOpaque: 
+		- Returns `true`. The Application loop stops iterating downwards when it sees this
+
+### PauseState:
+- **Owns** (Private variables):
+	- `overlayShaderHandle` and `overlayMeshHandle` (uint32_t): Extremely lightweight, holds no complex objects.
+- **Working / Life Cycle**:
+	- Initialize: 
+		- Frees the mouse cursor (`GLFW_CURSOR_NORMAL`) for menu interaction
+		- Fetches the overlay shader and 2D overlay mesh handles from AssetManager (utilizes DOD caching; doesn't re-compile existing assets)
+	- Update:
+		- Checks for ESC key -> recaptures the mouse and calls `app->PopState()` (pops itself off the stack, resuming PlayState on the next frame)
+	- Render:
+		- Manually overrides openGL state (bypass ECS): Enables `GL_BLEND` (for transparency) and disables `GL_DEPTH_TEST` (so it draws over the 3D world)
+		- Binds the overlay shader and mesh, executes raw `glDrawElements` draw call
+		- Restores openGL state (enables depth test, disables blend) to not break the next frame
+	- isOpaque: 
+		- Returns `false`. Tells the Application to render the state below it (PlayState) first, allowing this state to draw a transparent overlay on top.

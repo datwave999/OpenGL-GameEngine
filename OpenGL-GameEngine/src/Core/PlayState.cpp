@@ -20,10 +20,10 @@ void PlayState::Initialize() {
     // 2. Grab AssetManager from Application
     AssetManager& assets = app->GetAssets();
 
-    // 3. Compile Shaders 
-    coreShaderHandle = assets.LoadShader("core", "assets/Shaders/core.vert", "assets/Shaders/core.frag");
-    unlitShaderHandle = assets.LoadShader("unlit", "assets/Shaders/unlit.vert", "assets/Shaders/unlit.frag");
-    overlayShaderHandle = assets.LoadShader("overlay", "assets/Shaders/overlay.vert", "assets/Shaders/overlay.frag");
+    // 3. Compile Shaders & pre-warm shaders
+    uint32_t coreShaderHandle = assets.LoadShader("core", "assets/Shaders/core.vert", "assets/Shaders/core.frag");
+    uint32_t unlitShaderHandle = assets.LoadShader("unlit", "assets/Shaders/unlit.vert", "assets/Shaders/unlit.frag");
+    assets.LoadShader("overlay", "assets/Shaders/overlay.vert", "assets/Shaders/overlay.frag");
 
     // 4. Get Meshes
     auto cubeMesh = assets.CreateMesh("cube", StandardMeshes::CreateCube(2.0f));
