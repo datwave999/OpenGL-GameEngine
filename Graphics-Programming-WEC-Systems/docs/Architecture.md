@@ -8,15 +8,15 @@
 ## Entry Point to engine (Application class):
 - __Owns__ (Private variables):
 	- The window (unique_ptr): because window must be owned only by application and should not be copied
-	- AssetManager assets (stack alloc): global asset manager [Add more info here later]
+	- AssetManager assets (stack alloc): asset manager that lives in Application, shared using app->GetAssets()
 	- State Stack vector (holds unique state ptrs): to manage game states
-	- global variables to track dt and fps
+	- internal variables to calculate delta time and fps in main (run) loop
 - __Life Cycle Functions__:
 	- Initialization: 
 		- creates and stores unique_ptr of window
 		- initializes assets
 		- global engine settings (openGL and stbi)
-		- calls glfw input functions which calls the callback functions of the Static Input class (asynchronous callbacks)
+		- initializes glfw functions to register callbacks which are functions of the Static Input class (callbacks when window->pollEvents() runs)
 		- starts the game by pushing the first state (playstate)'s unique ptr (gives it a pointer to thyself)
 	- Run:
 		- The main engine's loop runs while window is alive (pressing x stops the while loop), also terminates if state stack gets empty.
@@ -25,12 +25,12 @@
 		- calls input's endFrame function [mentioned in Handling Inputs]
 		- Swaps Buffers (display the current back buffer)
 	- State Management: Helpers for pushing and popping states
-		- PushState: moves the unique_ptr of the state passed into it to the state stack
+		- PushState: Initializes state and moves the unique_ptr of the state passed into it to the state stack
 		- PopState: pops state
 	- Update: Updates the entire application (engine)
 		- only calls update function of the top state on the State Stack
 	- Render:
-		- clears the front buffer
+		- clears the back buffer and draws to it
 		- Render states (highest opaque to top)
 	- Shutdown:
 		- clears all states
@@ -50,7 +50,7 @@
 		- Owns the GLFWwindow* ptr
 		- framebuffer size callback (handle resizing the window)
 	- Initialize the OpenGL Context (Because openGL is a state machine)
-		- when window is created, glfw creates a default openGL context (GLFWwindow owns the context)
+		- when window is created, glfw creates an openGL context (GLFWwindow owns the context)
 - **Working**:
 	- Constructor (Called from app.Initialize() and stores in a unique_ptr):
 		- Initializes GLFW (the window, inputs and context library)
@@ -58,7 +58,7 @@
 		- creates the window
 		- Tie Window class's window instance to GLFWwindow (For resizing and changing internal pointers later in static function)
 		- [IMP] Makes Context Current (GLFWwindow owns the context which is not set as the current context, any openGL function calls will assume this context/window now)\
-		- load openGL (gl....) functions using GLAD (called after making context current so that glad knows which GPU you are using and fetches functions according to it)
+		- load openGL (gl....) functions using GLAD (GLAD finds OpenGL function pointers through glfwGetProcAddress after the context is made current)
 		- make viewport = window's size (viewport and window size are different things)
 		- callback for resizing window (window resize -> glfw functions calls the callback function -> callback function updates viewport and also internal width and height variables)
 	- Helper Functions (Abstaction): 
@@ -99,13 +99,13 @@ Currently a standalone C++ Class [Will be changed to be a component in the ECS a
 ### PlayState:
 - **Owns** (Private variables):
 	- Camera (unique_ptr)
-	- ECS Core: `entt::registry` (contiguous memory database where all components live)
+	- ECS Core: `entt::registry` (where all components live in their own contiguous memory)
 	- Systems: `TransformSystem`, `LightSystem`, and `RenderSystem`
 	- Entities Map: `std::unordered_map<std::string, Entity>` used as a sandbox to track specific objects [Anti-pattern: Just for tesing purposes, but doing this defeats the purpose of ECS]
 - **Working / Life Cycle**:
 	- Initialize: 
 		- Sets input mode (locks and hides cursor for FPS controls)
-		- Uses the global AssetManager to compile shaders, generate standard meshes, load textures, and load 3D models via Assimp
+		- Uses the shared AssetManager (from app) to compile shaders, generate standard meshes, load textures, and load 3D models via Assimp
 		- Creates Entities, adds components (Transform, Render, Lights) to them via ECS, and stores them in the entities map
 	- Update:
 		- Checks for ESC key -> calls `app->PushState` to overlay the PauseState and immediately `return;` (freezing PlayState logic)
@@ -132,3 +132,16 @@ Currently a standalone C++ Class [Will be changed to be a component in the ECS a
 		- Restores openGL state (enables depth test, disables blend) to not break the next frame
 	- isOpaque: 
 		- Returns `false`. Tells the Application to render the state below it (PlayState) first, allowing this state to draw a transparent overlay on top.
+
+## Graphics Abstraction
+### Buffer class
+Used to create buffers (VBO, EBO, UBO) easily
+- Holds buffer id and type
+- for VBO and EBO:
+	- Bind and Unbind buffers (For configuring the Mesh's VAO)
+- for UBO:
+	- Bind buffer base to a specific location (Global)
+- updateData (For Dynamic buffer like UBO):
+	- Supports both partial or full Orphaning to efficiently update the UBO data without pipeline stalls
+- Constructor generates buffer and adds data
+- Destructor deletes the buffer

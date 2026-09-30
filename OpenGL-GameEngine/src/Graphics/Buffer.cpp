@@ -1,6 +1,6 @@
 #include "Graphics/Buffer.h"
 
-Buffer::Buffer(GLenum type, GLsizeiptr size, const void* data, GLenum drawType) : bufferType(type)
+Buffer::Buffer(GLenum type, GLsizeiptr size, const void* data, GLenum drawType) : bufferType(type), bufferSize(size)
 {
 	glGenBuffers(1, &bufferID);
 	glBindBuffer(bufferType, bufferID);
@@ -25,7 +25,7 @@ void Buffer::updateData(GLintptr offset, GLsizeiptr size, const void* data) cons
 
 	// Get GPU memory to write data to (GL_MAP_INVALIDATE_BUFFER_BIT = Orphaning)
     void* mappedMemory = glMapBufferRange(bufferType, offset, size,
-        GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+		GL_MAP_WRITE_BIT | ((offset == 0 && size == bufferSize) ? GL_MAP_INVALIDATE_BUFFER_BIT : GL_MAP_INVALIDATE_RANGE_BIT));
 
     if (mappedMemory) {
 		// Copy the data over 

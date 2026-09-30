@@ -29,5 +29,6 @@ public:
 private:
 	GLuint bufferID = 0;
 	GLenum bufferType = GL_FALSE;
+	GLsizeiptr bufferSize = 0;
 };
 
