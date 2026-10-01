@@ -11,6 +11,7 @@ The project is under active development, exploring an Entity Component System (E
 - **ECS:** EnTT-backed entities and components, with separate transform, light, and render systems.
 - **Shared assets:** handle-based access to cached shaders, textures, materials, meshes, and models.
 - **Geometry and importing:** procedural cubes, spheres, and planes, plus static model loading through Assimp.
+- **Dynamic model loading:** press L to enter a cache key, model path, and UV-flip flag in the console and spawn a static model during gameplay.
 - **GPU data:** uniform buffers for camera, light, and material data; cached shader uniform locations.
 - **Render submission:** a reusable command queue sorted by shader and material to reduce repeated bindings.
 - **Application states:** play/pause state stack with a transparent pause overlay.
@@ -50,9 +51,30 @@ If Visual Studio reports a missing toolset or SDK, install the versions configur
 | Left Shift | Hold for a speed boost |
 | Mouse | Look around |
 | Scroll wheel | Adjust field of view |
+| L | Load/spawn a model through the console while playing |
 | Esc | Pause / resume and release / recapture the cursor |
 
 While paused, the scene remains visible beneath the overlay, but gameplay, camera, and light updates stop. Close the window to exit.
+
+## Dynamic Model Loading
+
+Press **L** in-game, switch to the console window, and enter the following:
+
+```text
+Cache key: backpack
+Model path: assets/Models/backpack/backpack.obj
+Flip UVs (0 or 1): 1
+```
+
+The model will spawn **three units in front of the camera** using the core lighting shader.
+
+**Important Details:**
+*   **Folder Structure:** Keep each model (file, materials, and textures) flat inside its own folder under `assets/Models/`. No subfolders.
+*   **Paths:** Enter the exact file path (relative to the working directory or absolute).
+*   **Caching:** Entering an existing cache key instantly reuses the loaded model (ignoring new path/UV inputs).
+*   **Execution:** Input and loading are synchronous (the game pauses). Invalid inputs or failed imports simply abort the spawn.
+
+Handled by `PlayState::LoadModelFromConsole()` and `AssetManager::LoadModel()`. See [Architecture](Graphics-Programming-WEC-Systems/docs/1.Architecture.md#playstate) and [Resources](Graphics-Programming-WEC-Systems/docs/3.Resources.md) for more on the state lifecycle and asset caching.
 
 ## Architecture at a Glance
 
@@ -85,7 +107,7 @@ Read the guides in this order for a walkthrough of the engine, or jump directly 
 
 | Guide | Covers |
 | --- | --- |
-| [1. Architecture](Graphics-Programming-WEC-Systems/docs/1.Architecture.md) | Application lifecycle, window/input, camera, state stack, frame order, and resource ownership. |
+| [1. Architecture](Graphics-Programming-WEC-Systems/docs/1.Architecture.md) | Application lifecycle, window/input, camera, state stack, dynamic model loading, frame order, and resource ownership. |
 | [2. Graphics Pipeline](Graphics-Programming-WEC-Systems/docs/2.GraphicsPipeline.md) | Render commands, vertex data, UBO layouts, shaders, lighting, and graphics wrappers. |
 | [3. Resources](Graphics-Programming-WEC-Systems/docs/3.Resources.md) | Asset handles, caching, procedural geometry, Assimp importing, and asset usage examples. |
 | [4. ECS Guide](Graphics-Programming-WEC-Systems/docs/4.ECS_Guide.md) | Entities, components, systems, views, scene setup, and adding new behavior. |
