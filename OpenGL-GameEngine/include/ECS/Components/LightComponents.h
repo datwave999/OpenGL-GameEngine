@@ -72,7 +72,7 @@ struct SpotLightUBOData {
 #define MAX_SPOT_LIGHTS 8
 
 struct LightUBO {
-    DirectionalLightComponent directionalLight; // (Keep as is, or split similarly)
+    DirectionalLightComponent directionalLight;
     PointLightUBOData pointLights[MAX_POINT_LIGHTS];
     SpotLightUBOData spotLights[MAX_SPOT_LIGHTS];
     int numPointLights;

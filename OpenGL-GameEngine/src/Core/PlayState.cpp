@@ -128,6 +128,9 @@ void PlayState::Update(float dt) {
         return; 
     }
 
+    // Camera update
+    camera->Update(dt);
+
     // --- GAME LOGIC ---
     auto& flagTc = entities["flag"].GetComponent<TransformComponent>();
     transformSystem.Rotate(flagTc, 40 * dt, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -146,15 +149,12 @@ void PlayState::Update(float dt) {
     auto& flashLightTc = entities["flashlight"].GetComponent<TransformComponent>();
     transformSystem.Rotate(flashLightTc, 60 * dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
-    // Update Transforms
+    // Update Systems
     transformSystem.Update(registry);
-
-    // --- UPDATE CAMERA ---
-    camera->Update(dt);
-    camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
-
-    // Update Lights
     lightSystem.Update(registry, camera->getPosition());
+
+    // Upload updated UBO data to camera
+    camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
 }
 
 void PlayState::Render() {
