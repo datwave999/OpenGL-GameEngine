@@ -21,7 +21,7 @@ void PlayState::Initialize() {
     AssetManager& assets = app->GetAssets();
 
     // 3. Compile Shaders & pre-warm shaders
-    uint32_t coreShaderHandle = assets.LoadShader("core", "assets/Shaders/core.vert", "assets/Shaders/core.frag");
+    coreShaderHandle = assets.LoadShader("core", "assets/Shaders/core.vert", "assets/Shaders/core.frag");
     uint32_t unlitShaderHandle = assets.LoadShader("unlit", "assets/Shaders/unlit.vert", "assets/Shaders/unlit.frag");
     assets.LoadShader("overlay", "assets/Shaders/overlay.vert", "assets/Shaders/overlay.frag");
 
@@ -128,6 +128,11 @@ void PlayState::Update(float dt) {
         return; 
     }
 
+    // Dynamic Model Loading
+    if (Input::keyWentDown(GLFW_KEY_L)) {
+        LoadModelFromConsole(coreShaderHandle);
+    }
+
     // Camera update
     camera->Update(dt);
 
@@ -159,4 +164,40 @@ void PlayState::Update(float dt) {
 
 void PlayState::Render() {
     renderSystem.Render(registry, app->GetAssets(), camera->getPosition());
+}
+
+void PlayState::LoadModelFromConsole(uint32_t shaderHandle)
+{
+    // Input key, location and flipUVs to spawn new model
+    std::string key;
+    std::string path;
+    std::string flipUVs;
+
+    std::cout << "\nCache key: " << std::flush;
+    if (!std::getline(std::cin, key)) return;
+
+    std::cout << "Model path: " << std::flush;
+    if (!std::getline(std::cin, path)) return;
+
+    std::cout << "Flip UVs (0 or 1): " << std::flush;
+    if (!std::getline(std::cin, flipUVs)) return;
+
+    if (key.empty() || path.empty() || (flipUVs != "0" && flipUVs != "1")) {
+        std::cout << "Enter a nonempty key/path and 0 or 1 in FlipUVs!\n";
+        return;
+    }
+
+    // Load The Model Dynamically
+    const uint32_t modelHandle = app->GetAssets().LoadModel(key, path, coreShaderHandle, flipUVs == "1");
+
+    if (modelHandle == UINT32_MAX) return;
+
+    // Spawn newly loaded model infront of the camera
+    const glm::vec3 position = camera->getPosition() + camera->getFront() * 3.0f;
+
+    Entity object(&registry);
+    object.AddComponent<TransformComponent>(position);
+    object.AddComponent<RenderComponent>(modelHandle);
+
+    std::cout << "Spawned: " << key << '\n';
 }

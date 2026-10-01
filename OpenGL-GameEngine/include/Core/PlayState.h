@@ -35,6 +35,12 @@ private:
     LightSystem lightSystem;
     RenderSystem renderSystem;
 
+    // Shaders
+    uint32_t coreShaderHandle = INT32_MAX;
+
     // entities we want to animate in Update() are stored
     std::unordered_map<std::string, Entity> entities;
+
+    // Dynamic Model Loading
+    void LoadModelFromConsole(uint32_t shaderHandle);
 };
