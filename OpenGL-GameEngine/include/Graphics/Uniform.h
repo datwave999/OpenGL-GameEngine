@@ -3,7 +3,7 @@
 enum class Uniform {  
 	model,        
 	view,         
-	projection,   
+	projection,  
 	normalMatrix,
 	materialDiffuse,
 	materialSpecular,

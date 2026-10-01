@@ -12,7 +12,7 @@ void RenderSystem::Render(entt::registry& registry, AssetManager& assets, glm::v
     view.each([&](auto entity, const auto& rc, const auto& tc) {
         const ModelAsset* model = assets.GetModel(rc.modelHandle);
         if (!model) return;
-
+       
         for (const auto& node : model->nodes) {
             const MaterialAsset* mat = assets.GetMaterial(node.materialHandle);
 
@@ -44,6 +44,7 @@ void RenderSystem::Render(entt::registry& registry, AssetManager& assets, glm::v
         // A. Bind Shader if changed
         if (cmd.shaderHandle != currentShaderID) {
             activeShader = assets.GetShader(cmd.shaderHandle);
+            if (activeShader == nullptr) continue;
             activeShader->enableShader();
             activeShader->setUniform(Uniform::cameraPos, cameraPos);
             currentShaderID = cmd.shaderHandle;

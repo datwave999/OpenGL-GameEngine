@@ -55,8 +55,11 @@ uint32_t AssetManager::LoadTexture(const std::string& key, const std::string& pa
     }
     else {
         std::cerr << "Failed to load texture: " << path << std::endl;
+
         glDeleteTextures(1, &texGPU.textureID);
-        texGPU.textureID = 0;
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        return UINT32_MAX;
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -93,6 +96,11 @@ uint32_t AssetManager::CreateTexture(const std::string& key, glm::vec4 color) {
 uint32_t AssetManager::CreateMesh(const std::string& key, const std::vector<Vertex>& verts, const std::vector<GLuint>& indices) {
     if (meshMap.find(key) != meshMap.end()) return meshMap[key];
 
+    if (verts.empty() || indices.empty()) {
+        std::cerr << "Empty mesh: " << key << '\n';
+        return UINT32_MAX;
+    }
+
     MeshGPU mesh;
 
     std::unique_ptr<VertexArray> VAO = std::make_unique<VertexArray>();
@@ -122,8 +130,8 @@ uint32_t AssetManager::CreateMaterial(const std::string& key, uint32_t diffTex, 
 
     MaterialAsset mat;
     mat.shaderHandle = shaderHandle;
-    mat.diffuseTextureHandle = diffTex;
-    mat.specularTextureHandle = (specTex == (uint32_t)-1) ? defaultSpecularHandle : specTex;
+    mat.diffuseTextureHandle = (diffTex == UINT32_MAX) ? defaultTextureHandle : diffTex;
+    mat.specularTextureHandle = (specTex == UINT32_MAX) ? defaultSpecularHandle : specTex;
     mat.shininess = shininess;
     mat.specularIntensity = specIntensity;
 
@@ -223,14 +231,18 @@ ModelAsset::ModelNode AssetManager::processMesh(aiMesh* mesh, const aiScene* sce
             material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
             std::string assimpPath = str.C_Str();
             std::string filename = assimpPath.substr(assimpPath.find_last_of("/\\") + 1);
-            diffMap = LoadTexture(directory + "/" + filename, directory + "/" + filename);
+
+            uint32_t loadedTex = LoadTexture(directory + "/" + filename, directory + "/" + filename);
+            if (loadedTex != UINT32_MAX) diffMap = loadedTex;
         }
         if (material->GetTextureCount(aiTextureType_SPECULAR) > 0) {
             aiString str;
             material->GetTexture(aiTextureType_SPECULAR, 0, &str);
             std::string assimpPath = str.C_Str();
             std::string filename = assimpPath.substr(assimpPath.find_last_of("/\\") + 1);
-            specMap = LoadTexture(directory + "/" + filename, directory + "/" + filename);
+            
+            uint32_t loadedTex = LoadTexture(directory + "/" + filename, directory + "/" + filename);
+            if (loadedTex != UINT32_MAX) specMap = loadedTex;
         }
         material->Get(AI_MATKEY_SHININESS, shininess);
         aiColor3D specularColor(0.0f, 0.0f, 0.0f);
