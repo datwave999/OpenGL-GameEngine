@@ -146,13 +146,15 @@ void PlayState::Update(float dt) {
     auto& flashLightTc = entities["flashlight"].GetComponent<TransformComponent>();
     transformSystem.Rotate(flashLightTc, 60 * dt, glm::vec3(0.0f, 1.0f, 0.0f));
 
-    // Update Systems
+    // Update Transforms
     transformSystem.Update(registry);
-    lightSystem.Update(registry, camera->getPosition());
 
     // --- UPDATE CAMERA ---
     camera->Update(dt);
     camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
+
+    // Updadte Lights
+    lightSystem.Update(registry, camera->getPosition());
 }
 
 void PlayState::Render() {

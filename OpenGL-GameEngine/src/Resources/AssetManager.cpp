@@ -127,6 +127,7 @@ uint32_t AssetManager::CreateMaterial(const std::string& key, uint32_t diffTex, 
     mat.shininess = shininess;
     mat.specularIntensity = specIntensity;
 
+    // Hardcoded texture units
     mat.diffuseUnit = 1;
     mat.specularUnit = 2;
 
