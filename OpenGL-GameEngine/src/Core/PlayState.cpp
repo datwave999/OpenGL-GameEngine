@@ -153,7 +153,7 @@ void PlayState::Update(float dt) {
     camera->Update(dt);
     camera->UpdateUBO(app->GetWindow()->getWidth(), app->GetWindow()->getHeight());
 
-    // Updadte Lights
+    // Update Lights
     lightSystem.Update(registry, camera->getPosition());
 }
 
