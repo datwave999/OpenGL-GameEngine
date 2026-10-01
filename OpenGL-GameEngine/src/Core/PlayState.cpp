@@ -29,6 +29,7 @@ void PlayState::Initialize() {
     auto cubeMesh = assets.CreateMesh("cube", StandardMeshes::CreateCube(2.0f));
     auto sphereMesh = assets.CreateMesh("sphere", StandardMeshes::CreateSphere());
     auto planeMesh = assets.CreateMesh("plane", StandardMeshes::CreatePlane(10.0f));
+    auto testSquare = assets.CreateMesh("testSquare", StandardMeshes::CreateOverlay());
 
     // 5. Get Textures 
     auto obamaTex = assets.LoadTexture("obama", "assets/Textures/obama_sandwich.jpg");
@@ -60,6 +61,8 @@ void PlayState::Initialize() {
     auto redLightModel = assets.CreateModel("redLight", sphereMesh, redMat);
     auto greenLightModel = assets.CreateModel("greenLight", sphereMesh, greenMat);
     auto flashLightModel = assets.LoadModel("flashlight", "assets/Models/flashlight/silencer-small.fbx", unlitShaderHandle);
+
+    auto testSquareModel = assets.CreateModel("testSquareModel", testSquare, redMat);
 
     // The Sun
     lightSystem.SetDirectionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(0.8f), 0.5f, 0.2f);
@@ -112,6 +115,10 @@ void PlayState::Initialize() {
     entities["flashlight"].AddComponent<TransformComponent>(glm::vec3(0.0f, 10.0f, 0.0f), glm::quat(glm::radians(glm::vec3(-45.0f, -90.0f, 0.0f))), glm::vec3(0.05f));
     entities["flashlight"].AddComponent<RenderComponent>(flashLightModel);
     entities["flashlight"].AddComponent<SpotLightComponent>(glm::vec3(1.0f, 1.0f, 0.0f), 15.0f, 20.0f, 100.0f);
+
+    entities["testSquare"] = Entity(&registry);
+    entities["testSquare"].AddComponent<TransformComponent>(glm::vec3(2.0f, 5.0f, -2.0f), glm::quat(1, 0, 0, 0), glm::vec3(1.0f));
+    entities["testSquare"].AddComponent<RenderComponent>(testSquareModel);
 }
 
 void PlayState::Update(float dt) {

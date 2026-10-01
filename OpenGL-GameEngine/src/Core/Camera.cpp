@@ -60,7 +60,7 @@ void Camera::Update(float dt) {
     FOV -= static_cast<float>(Input::getScrollDY()) * 2.0f;
 
     if (FOV < 1.0f) FOV = 1.0f;
-    if (FOV > 90.0f) FOV = 90.0f;
+    if (FOV > 110.0f) FOV = 110.0f;
 }
 
 // --- DELEGATION ---
