@@ -115,6 +115,11 @@ void PlayState::Initialize() {
     entities["blueLight"].AddComponent<RenderComponent>(blueLightModel);
     entities["blueLight"].AddComponent<PointLightComponent>(blueColour, 16.0f, 3.0f, 0.0f, 1.2f);
 
+    entities["bigLight"] = Entity(&registry);
+    entities["bigLight"].AddComponent<TransformComponent>(glm::vec3(0.0f, 2.0f, 15.0f), glm::quat(1, 0, 0, 0), glm::vec3(0.35f));
+    entities["bigLight"].AddComponent<RenderComponent>(blueLightModel);
+    entities["bigLight"].AddComponent<PointLightComponent>(blueColour, 100.0f, 1.0f, 0.0f, 0.8f);
+
     entities["sedanLight"] = Entity(&registry);
     entities["sedanLight"].AddComponent<TransformComponent>(glm::vec3(-2.78f, 0.8f, -3.03f), glm::quat(1, 0, 0, 0), glm::vec3(0.15f));
     entities["sedanLight"].AddComponent<RenderComponent>(redLightModel);
