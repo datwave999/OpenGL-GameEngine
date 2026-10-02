@@ -10,6 +10,7 @@ The project is under active development.
     <img src="https://img.youtube.com/vi/B5eTTHENevE/maxresdefault.jpg" alt="OpenGL Game Engine Demo" width="300">
   </a>
 </div>
+
 ## Implemented Features
 
 - **Application states:** a play/pause state stack. Pausing stops updates and draws a transparent overlay over the scene.
