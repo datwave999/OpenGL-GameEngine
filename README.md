@@ -19,4 +19,4 @@ This project is currently under active development. The goal is to build a high-
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is intended to be open-source, but the specific license is **TBD (To Be Decided)**.

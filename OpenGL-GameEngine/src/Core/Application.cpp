@@ -124,7 +124,4 @@ void Application::Run() {
 void Application::Shutdown() {
     // Destroy all states
     states.clear(); 
-    
-    // Clear asset cache (just empty map keys)
-    // assets.CleanCache();
 }
