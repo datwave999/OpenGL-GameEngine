@@ -371,3 +371,6 @@ FodyWeavers.xsd
 implementation_plan.md
 task.md
 walkthrough.md
+
+# commit obj files of models
+!OpenGL-GameEngine/assets/**/*.obj
