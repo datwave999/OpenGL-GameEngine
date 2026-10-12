@@ -47,7 +47,7 @@ It opens a 1920 × 1080 window with a test scene containing procedural shapes, i
 On Windows, install Visual Studio with the Desktop development with C++ workload, the MSVC v145 toolset, and a Windows 10 SDK. The current build requests an OpenGL 4.6 core context, so your GPU and driver need to support it.
 
 1. Clone or download the repository, keeping the dependency headers and libraries under `Linking/`.
-2. Open `Graphics-Programming-WEC-Systems.slnx` in Visual Studio and select **x64**, then **Debug** or **Release**.
+2. Open `OpenGL-GameEngine.slnx` in Visual Studio and select **x64**, then **Debug** or **Release**.
 3. Set **Project Properties → Debugging → Working Directory** to `$(ProjectDir)` so the engine can find `assets/`.
 4. Build the solution and copy `glfw3.dll` and `assimp-vc145-mt.dll` from the project folder beside the generated executable if needed.
 5. Run with **F5** or **Ctrl+F5**.
@@ -117,18 +117,18 @@ Read the guides in this order for a walkthrough of the engine.
 
 | Guide | Covers |
 | --- | --- |
-| [1. Architecture](Graphics-Programming-WEC-Systems/docs/1.Architecture.md) | Application lifecycle, window/input, camera, state stack, dynamic model loading, frame order, and resource ownership. |
-| [2. Graphics Pipeline](Graphics-Programming-WEC-Systems/docs/2.GraphicsPipeline.md) | Render commands, vertex data, UBO layouts, shaders, lighting, and graphics wrappers. |
-| [3. Resources](Graphics-Programming-WEC-Systems/docs/3.Resources.md) | Asset handles, caching, procedural geometry, Assimp importing, and asset usage examples. |
-| [4. ECS Guide](Graphics-Programming-WEC-Systems/docs/4.ECS_Guide.md) | Entities, components, systems, views, scene setup, and adding new behavior. |
-| [5. Optimizations](Graphics-Programming-WEC-Systems/docs/5.Optimizations.md) | Candidate improvements, their tradeoffs, and profiling workloads to evaluate them. |
+| [1. Architecture](OpenGL-GameEngine/docs/1.Architecture.md) | Application lifecycle, window/input, camera, state stack, dynamic model loading, frame order, and resource ownership. |
+| [2. Graphics Pipeline](OpenGL-GameEngine/docs/2.GraphicsPipeline.md) | Render commands, vertex data, UBO layouts, shaders, lighting, and graphics wrappers. |
+| [3. Resources](OpenGL-GameEngine/docs/3.Resources.md) | Asset handles, caching, procedural geometry, Assimp importing, and asset usage examples. |
+| [4. ECS Guide](OpenGL-GameEngine/docs/4.ECS_Guide.md) | Entities, components, systems, views, scene setup, and adding new behavior. |
+| [5. Optimizations](OpenGL-GameEngine/docs/5.Optimizations.md) | Candidate improvements, their tradeoffs, and profiling workloads to evaluate them. |
 
 ## Project Layout
 
 ```text
-Graphics-Programming-WEC-Systems.slnx
+OpenGL-GameEngine.slnx
 Linking/                          Dependency headers and libraries
-Graphics-Programming-WEC-Systems/
+OpenGL-GameEngine/
 ├── assets/                       Shaders, textures, and models
 ├── docs/                         Detailed engine documentation
 ├── include/                      Core, Graphics, ECS, and Resources headers
@@ -142,7 +142,7 @@ Graphics-Programming-WEC-Systems/
 - **Future optimizations:** smaller render commands, tracking changed transforms, frustum culling, instancing, and less repeated light processing and GPU data transfer. SSBOs, shader consolidation, and Forward+ rendering are also being considered, with profiling to guide which changes to make first.
 - **Future features:** PBR materials and lighting, HDR rendering with bloom, dynamic shadows, a skybox, and an alternative deferred rendering pipeline.
 
-See the [Optimizations guide](Graphics-Programming-WEC-Systems/docs/5.Optimizations.md) for the full list.
+See the [Optimizations guide](OpenGL-GameEngine/docs/5.Optimizations.md) for the full list.
 
 ## Learning Resources
 
