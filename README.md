@@ -157,6 +157,6 @@ These are the tutorials and references I've used while building the engine:
 
 I use AI to learn unfamiliar concepts, figure out how to manage a growing codebase, and work through the implementation of new features. I don't have AI agents writing the engine for me. I mostly write the code myself. When I do use an AI-generated snippet, it's a short section that I read and understand line by line before using it.
 
-## License
+## License [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-The project is intended to be open-source. The specific license is **TBD (To Be Decided)**.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
